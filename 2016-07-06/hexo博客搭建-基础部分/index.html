@@ -68,7 +68,7 @@
 <link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="hexo,教程," />
+  <meta name="keywords" content="hexo,博客," />
 
 
 
@@ -93,7 +93,7 @@ Git
 安装hexo如果">
 <meta property="og:type" content="article">
 <meta property="og:title" content="hexo博客搭建 --- 基础部分">
-<meta property="og:url" content="http://yoursite.com/2016-07-06/hexo博客搭建-基础部分/index.html">
+<meta property="og:url" content="http://yaochg.com/2016-07-06/hexo博客搭建-基础部分/index.html">
 <meta property="og:site_name" content="YaoC's Blog">
 <meta property="og:description" content="Hexo is a fast, simple and powerful blog framework. You write posts in Markdown (or other languages) and Hexo generates static files with a beautiful theme in seconds.
 
@@ -108,7 +108,7 @@ Git
 <meta property="og:image" content="http://o9w932hp8.bkt.clouddn.com/2016-07-06%2018-25-00%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE.png">
 <meta property="og:image" content="http://o9w932hp8.bkt.clouddn.com/2016-07-06%2018-40-58%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE.png">
 <meta property="og:image" content="http://o9w932hp8.bkt.clouddn.com/2016-07-06%2018-47-10%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE.png">
-<meta property="og:updated_time" content="2016-07-06T13:21:47.097Z">
+<meta property="og:updated_time" content="2016-09-06T06:35:36.474Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="hexo博客搭建 --- 基础部分">
 <meta name="twitter:description" content="Hexo is a fast, simple and powerful blog framework. You write posts in Markdown (or other languages) and Hexo generates static files with a beautiful theme in seconds.
@@ -139,7 +139,7 @@ Git
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2016-07-06/hexo博客搭建-基础部分/"/>
+  <link rel="canonical" href="http://yaochg.com/2016-07-06/hexo博客搭建-基础部分/"/>
 
   <title> hexo博客搭建 --- 基础部分 | YaoC's Blog </title>
 </head>
@@ -309,6 +309,25 @@ Git
           </span>
 
           
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/教程/" itemprop="url" rel="index">
+                    <span itemprop="name">教程</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
 
           
             
@@ -362,7 +381,7 @@ Git
 <blockquote>
 <p>├── _config.yml<br>├── package.json<br>├── scaffolds<br>├── source<br> &nbsp;|  &nbsp; &nbsp; &nbsp;├── _drafts<br>&nbsp;|   &nbsp; &nbsp; &nbsp;└── _posts<br>└── themes</p>
 </blockquote>
-<p>其中<code>themes</code>文件夹中存放了博客的主题<br><img src="http://o9w932hp8.bkt.clouddn.com/2016-07-06%2018-15-07%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE.png" alt="Alt text"><br>如图所示，<code>landscape</code>和<code>next</code>就是两个不同的主题，以安装<code>next</code>主题为例，我们首先将主题下载到<code>themes</code>文件夹中，然后打开博客根目录下的配置文件<code>_config.yml</code>，将’theme‘一项的<code>landscape</code>替换为<code>next</code>就可以了。<br>接下来我们通过<code>$ hexo clean</code>命令清空博客缓存，<code>$ hexo g</code>命令重新生成博客静态文件以及<code>$ hexo s</code>命令启动本地服务。可以看到，我们的博客以及应用了新的主题。<br><img src="http://o9w932hp8.bkt.clouddn.com/2016-07-06%2018-25-00%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE.png" alt="Alt text"></p>
+<p>其中<code>themes</code>文件夹中存放了博客的主题<br><img src="http://o9w932hp8.bkt.clouddn.com/2016-07-06%2018-15-07%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE.png" alt="Alt text"><br>如图所示，<code>landscape</code>和<code>next</code>就是两个不同的主题，以安装<code>next</code>主题为例，我们首先将主题下载到<code>themes</code>文件夹中，然后打开博客根目录下的配置文件<code>_config.yml</code>，将’theme‘一项的<code>landscape</code>替换为<code>next</code>就可以了。<br>接下来我们通过<code>$ hexo clean</code>命令清空博客缓存，<code>$ hexo g</code>命令重新生成博客静态文件以及<code>$ hexo s</code>命令启动本地服务。可以看到，我们的博客已经应用了新的主题。<br><img src="http://o9w932hp8.bkt.clouddn.com/2016-07-06%2018-25-00%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE.png" alt="Alt text"></p>
 <h2 id="发布博文"><a href="#发布博文" class="headerlink" title="发布博文"></a>发布博文</h2><p>使用如下命令可以新建一篇博文<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hexo new 博文标题</div></pre></td></tr></table></figure></p>
 <p>我们以本篇博文为例新建一篇博文<br><strong>1.新建博文</strong><br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hexo new hexo博客搭建\ ---\ 基础部分</div></pre></td></tr></table></figure></p>
 <p>新建好的博文可以在博客根目录下的<code>source/_posts</code>中找到<br><strong>2.打开新建的博文，写入自己的内容</strong><br>刚才新建好的博文如图所示：<br><img src="http://o9w932hp8.bkt.clouddn.com/2016-07-06%2018-40-58%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE.png" alt="Alt text"><br>我们需要在里面填写博文的正文，这样一篇新的文章就写好了，我们通过和之前一样的清空缓存、重新生成静态文件、启动服务等一系列操作可以看到新的博文已经出现在我们的博客中了。<br><img src="http://o9w932hp8.bkt.clouddn.com/2016-07-06%2018-47-10%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE.png" alt="Alt text"><br>当然，我们也可以不使用<code>$ hexo new 博文标题</code>来生成新的文章，只要你把符合格式的<code>markdown</code>文件放入<code>_posts</code>文件夹中就可以了。</p>
@@ -410,11 +429,25 @@ Git
           
             <a href="/tags/hexo/" rel="tag">#hexo</a>
           
-            <a href="/tags/教程/" rel="tag">#教程</a>
+            <a href="/tags/博客/" rel="tag">#博客</a>
           
         </div>
       
 
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016-09-06/CCF试题——有趣的数/" rel="prev" title="CCF试题——有趣的数">
+                CCF试题——有趣的数 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
       
 
       
@@ -461,7 +494,7 @@ Git
   <div class="comments" id="comments">
     
       <div class="ds-thread" data-thread-key="2016-07-06/hexo博客搭建-基础部分/"
-           data-title="hexo博客搭建 --- 基础部分" data-url="http://yoursite.com/2016-07-06/hexo博客搭建-基础部分/">
+           data-title="hexo博客搭建 --- 基础部分" data-url="http://yaochg.com/2016-07-06/hexo博客搭建-基础部分/">
       </div>
     
   </div>
@@ -506,17 +539,24 @@ Git
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">1</span>
+              <span class="site-state-item-count">2</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
 
           
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">2</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
 
           
             <div class="site-state-item site-state-tags">
               <a href="/tags">
-                <span class="site-state-item-count">2</span>
+                <span class="site-state-item-count">5</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>
@@ -728,6 +768,26 @@ Git
   
   
   
+  <script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    });
+  </script>
+
+  <script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+      var all = MathJax.Hub.getAllJax(), i;
+      for (i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';
+      }
+    });
+  </script>
+  <script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
 
   
 
