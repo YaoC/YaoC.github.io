@@ -268,6 +268,155 @@
             
               
                 
+                <a class="post-title-link" href="/2016-10-07/使用hadoop命令运行程序（hadoop-2-7-3）/" itemprop="url">
+                  使用hadoop命令运行程序（hadoop 2.7.3）
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-10-07T02:03:56+08:00" content="2016-10-07">
+              2016-10-07
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/教程/" itemprop="url" rel="index">
+                    <span itemprop="name">教程</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016-10-07/使用hadoop命令运行程序（hadoop-2-7-3）/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016-10-07/使用hadoop命令运行程序（hadoop-2-7-3）/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+             <span id="/2016-10-07/使用hadoop命令运行程序（hadoop-2-7-3）/" class="leancloud_visitors" data-flag-title="使用hadoop命令运行程序（hadoop 2.7.3）">
+               &nbsp; | &nbsp;
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               <span class="post-meta-item-text">阅读次数 </span>
+               <span class="leancloud-visitors-count"></span>
+              </span>
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>最近在看<a href="https://book.douban.com/subject/26206050/" target="_blank" rel="external">《Hadoop权威指南(第3版)》</a>这本书，作者对hadoop生态系统的讲解十分通俗易懂，再加上大量的代码示例，实在是一本hadoop入门的优秀教材。 一开始我是用maven搭建的hadoop环境运行书中的代码，配置什么的都不需要我去处理。但是书中都是直接通过命令行运行，所以我也想尝试一下使用hadoop命令来运行代码。<br>以<code>第3章 Hadoop分布式文件系统</code>中的<code>3.5.1 从Hadoop URL读取数据</code>的代码为例，我们先照着书把代码写好，这里命名为<code>URLCat.java</code>。</p>
+<blockquote>
+<p>注意不要忘了加上各种 <em>import</em></p>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">import</span> java.io.InputStream;</div><div class="line"><span class="keyword">import</span> java.net.URL;</div><div class="line"><span class="keyword">import</span> org.apache.hadoop.fs.FsUrlStreamHandlerFactory;</div><div class="line"><span class="keyword">import</span> org.apache.hadoop.io.IOUtils;</div><div class="line"></div><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">URLCat</span> </span>&#123;</div><div class="line">	<span class="keyword">static</span> &#123;</div><div class="line">		URL.setURLStreamHandlerFactory(<span class="keyword">new</span> FsUrlStreamHandlerFactory());</div><div class="line">	&#125; </div><div class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> Exception </span>&#123;</div><div class="line">		InputStream in = <span class="keyword">null</span>;</div><div class="line">		<span class="keyword">try</span> &#123;</div><div class="line">			in = <span class="keyword">new</span> URL(args[<span class="number">0</span>]).openStream();</div><div class="line">			IOUtils.copyBytes(in, System.out, <span class="number">4096</span>, <span class="keyword">false</span>);</div><div class="line">		&#125; <span class="keyword">finally</span> &#123;</div><div class="line">			IOUtils.closeStream(in);</div><div class="line">		&#125;</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>接着我们进行编译，进入<code>URLCat.java</code>所在的目录执行以下命令：<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ javac -classpath ~/softwares/hadoop-2.7.3/share/hadoop/common/hadoop-common-2.7.3.jar URLCat.java</div></pre></td></tr></table></figure></p>
+<blockquote>
+<p>编译时使用了<code>classpath</code>指定引入类的路径，如果你已经在环境变量中配置了hadoop的相关路径则不需要该参数。在较早版本的hadoop中直接引入<code>hadoop-core-x.y.z.jar</code>就可以将所有的的依赖解决了。但是从<code>hadoop 2.0</code>来就没有<code>hadoop-core-x.y.z.jar</code>这个文件了，取而代之的是多个分散的jar包，用户可以根据需要引入相应的包进行编译。感觉挺麻烦的:( ，这里我们就使用了<code>hadoop-common-2.7.3.jar</code>这个包。</p>
+</blockquote>
+<p><img src="http://o9w932hp8.bkt.clouddn.com/2016-10-07%2001-39-24%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE.png" alt="编译生成URLCat.class"></p>
+<p>按照书上的介绍，我们可以直接使用 <code>hadoop CLASSNAME</code>命令运行程序，但是我这样做一直被提示<code>错误: 找不到或无法加载主类</code>。在网上找了各种解决办法然而问题依旧存在。</p>
+<p><img src="http://o9w932hp8.bkt.clouddn.com/2016-10-07%2001-43-51%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE.png" alt="使用hadoop CLASSNAME 报错"></p>
+<p>没办法，我只好尝试另一个命令——<code>hadoop jar</code>，将编译好的<code>URLCat.class</code>文件打包，然后用该命令运行。命令如下：<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">$ <span class="built_in">cd</span> Test 			<span class="comment">#进入 URLCat.class 文件所在目录</span></div><div class="line">$ jar -cvf URLCat.jar URLCat.class</div></pre></td></tr></table></figure></p>
+<p><img src="http://o9w932hp8.bkt.clouddn.com/2016-10-07%2001-50-40%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE.png" alt="生成jar包"></p>
+<p>这样我们就可以使用<code>hadoop jar</code>命令运行我们的代码了。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ bin/hadoop jar Test/URLCat.jar URLCat hdfs://localhost:9001/user/cyao/test.txt</div></pre></td></tr></table></figure>
+<p>可以看到<code>test.txt</code>里的内容已经显示出来了。</p>
+<p><img src="http://o9w932hp8.bkt.clouddn.com/2016-10-07%2002-10-11%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE.png" alt="运行jar文件"></p>
+<blockquote>
+<p> 关于hadoop安装和使用HDFS的内容书中已经详细说明了，所以这里就不再细述。另外在我的电脑上<strong>HDFS的默认端口</strong><code>9000</code>已经被占用，所以我通过<code>core-site.xml</code>配置文件重新指定了<code>9001</code>端口。</p>
+</blockquote>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
                 <a class="post-title-link" href="/2016-09-06/CCF试题——有趣的数/" itemprop="url">
                   CCF试题——有趣的数
                 </a>
@@ -663,7 +812,7 @@
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">2</span>
+              <span class="site-state-item-count">3</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
@@ -680,7 +829,7 @@
           
             <div class="site-state-item site-state-tags">
               <a href="/tags">
-                <span class="site-state-item-count">5</span>
+                <span class="site-state-item-count">7</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>

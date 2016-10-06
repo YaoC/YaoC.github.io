@@ -68,7 +68,7 @@
 <link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="hexo,博客," />
+  <meta name="keywords" content="hadoop,Java," />
 
 
 
@@ -84,41 +84,21 @@
 
 
 
-<meta name="description" content="Hexo is a fast, simple and powerful blog framework. You write posts in Markdown (or other languages) and Hexo generates static files with a beautiful theme in seconds.
-
-搭建博客所需工具
-Node.js
-Git
-
-安装hexo如果">
+<meta name="description" content="最近在看《Hadoop权威指南(第3版)》这本书，作者对hadoop生态系统的讲解十分通俗易懂，再加上大量的代码示例，实在是一本hadoop入门的优秀教材。 一开始我是用maven搭建的hadoop环境运行书中的代码，配置什么的都不需要我去处理。但是书中都是直接通过命令行运行，所以我也想尝试一下使用hadoop命令来运行代码。以第3章 Hadoop分布式文件系统中的3.5.1 从Hadoop UR">
 <meta property="og:type" content="article">
-<meta property="og:title" content="hexo博客搭建 --- 基础部分">
-<meta property="og:url" content="http://yaochg.com/2016-07-06/hexo博客搭建-基础部分/index.html">
+<meta property="og:title" content="使用hadoop命令运行程序（hadoop 2.7.3）">
+<meta property="og:url" content="http://yaochg.com/2016-10-07/使用hadoop命令运行程序（hadoop-2-7-3）/index.html">
 <meta property="og:site_name" content="YaoC's Blog">
-<meta property="og:description" content="Hexo is a fast, simple and powerful blog framework. You write posts in Markdown (or other languages) and Hexo generates static files with a beautiful theme in seconds.
-
-搭建博客所需工具
-Node.js
-Git
-
-安装hexo如果">
-<meta property="og:image" content="http://o9w932hp8.bkt.clouddn.com/2016-07-06%2017-46-05%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE.png">
-<meta property="og:image" content="http://o9w932hp8.bkt.clouddn.com/2016-07-06%2018-06-24%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE.png">
-<meta property="og:image" content="http://o9w932hp8.bkt.clouddn.com/2016-07-06%2018-15-07%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE.png">
-<meta property="og:image" content="http://o9w932hp8.bkt.clouddn.com/2016-07-06%2018-25-00%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE.png">
-<meta property="og:image" content="http://o9w932hp8.bkt.clouddn.com/2016-07-06%2018-40-58%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE.png">
-<meta property="og:image" content="http://o9w932hp8.bkt.clouddn.com/2016-07-06%2018-47-10%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE.png">
-<meta property="og:updated_time" content="2016-09-06T06:35:36.474Z">
+<meta property="og:description" content="最近在看《Hadoop权威指南(第3版)》这本书，作者对hadoop生态系统的讲解十分通俗易懂，再加上大量的代码示例，实在是一本hadoop入门的优秀教材。 一开始我是用maven搭建的hadoop环境运行书中的代码，配置什么的都不需要我去处理。但是书中都是直接通过命令行运行，所以我也想尝试一下使用hadoop命令来运行代码。以第3章 Hadoop分布式文件系统中的3.5.1 从Hadoop UR">
+<meta property="og:image" content="http://o9w932hp8.bkt.clouddn.com/2016-10-07%2001-39-24%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE.png">
+<meta property="og:image" content="http://o9w932hp8.bkt.clouddn.com/2016-10-07%2001-43-51%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE.png">
+<meta property="og:image" content="http://o9w932hp8.bkt.clouddn.com/2016-10-07%2001-50-40%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE.png">
+<meta property="og:image" content="http://o9w932hp8.bkt.clouddn.com/2016-10-07%2002-10-11%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE.png">
+<meta property="og:updated_time" content="2016-10-06T18:18:42.400Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="hexo博客搭建 --- 基础部分">
-<meta name="twitter:description" content="Hexo is a fast, simple and powerful blog framework. You write posts in Markdown (or other languages) and Hexo generates static files with a beautiful theme in seconds.
-
-搭建博客所需工具
-Node.js
-Git
-
-安装hexo如果">
-<meta name="twitter:image" content="http://o9w932hp8.bkt.clouddn.com/2016-07-06%2017-46-05%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE.png">
+<meta name="twitter:title" content="使用hadoop命令运行程序（hadoop 2.7.3）">
+<meta name="twitter:description" content="最近在看《Hadoop权威指南(第3版)》这本书，作者对hadoop生态系统的讲解十分通俗易懂，再加上大量的代码示例，实在是一本hadoop入门的优秀教材。 一开始我是用maven搭建的hadoop环境运行书中的代码，配置什么的都不需要我去处理。但是书中都是直接通过命令行运行，所以我也想尝试一下使用hadoop命令来运行代码。以第3章 Hadoop分布式文件系统中的3.5.1 从Hadoop UR">
+<meta name="twitter:image" content="http://o9w932hp8.bkt.clouddn.com/2016-10-07%2001-39-24%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE.png">
 
 
 
@@ -139,9 +119,9 @@ Git
 
 
 
-  <link rel="canonical" href="http://yaochg.com/2016-07-06/hexo博客搭建-基础部分/"/>
+  <link rel="canonical" href="http://yaochg.com/2016-10-07/使用hadoop命令运行程序（hadoop-2-7-3）/"/>
 
-  <title> hexo博客搭建 --- 基础部分 | YaoC's Blog </title>
+  <title> 使用hadoop命令运行程序（hadoop 2.7.3） | YaoC's Blog </title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
@@ -291,7 +271,7 @@ Git
             
             
               
-                hexo博客搭建 --- 基础部分
+                使用hadoop命令运行程序（hadoop 2.7.3）
               
             
           </h1>
@@ -303,8 +283,8 @@ Git
               <i class="fa fa-calendar-o"></i>
             </span>
             <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2016-07-06T18:33:06+08:00" content="2016-07-06">
-              2016-07-06
+            <time itemprop="dateCreated" datetime="2016-10-07T02:03:56+08:00" content="2016-10-07">
+              2016-10-07
             </time>
           </span>
 
@@ -333,8 +313,8 @@ Git
             
               <span class="post-comments-count">
                 &nbsp; | &nbsp;
-                <a href="/2016-07-06/hexo博客搭建-基础部分/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016-07-06/hexo博客搭建-基础部分/" itemprop="commentsCount"></span>
+                <a href="/2016-10-07/使用hadoop命令运行程序（hadoop-2-7-3）/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016-10-07/使用hadoop命令运行程序（hadoop-2-7-3）/" itemprop="commentsCount"></span>
                 </a>
               </span>
             
@@ -344,7 +324,7 @@ Git
 
           
           
-             <span id="/2016-07-06/hexo博客搭建-基础部分/" class="leancloud_visitors" data-flag-title="hexo博客搭建 --- 基础部分">
+             <span id="/2016-10-07/使用hadoop命令运行程序（hadoop-2-7-3）/" class="leancloud_visitors" data-flag-title="使用hadoop命令运行程序（hadoop 2.7.3）">
                &nbsp; | &nbsp;
                <span class="post-meta-item-icon">
                  <i class="fa fa-eye"></i>
@@ -366,25 +346,27 @@ Git
       
 
       
-        <blockquote>
-<p>Hexo is a fast, simple and powerful blog framework. You write posts in Markdown (or other languages) and Hexo generates static files with a beautiful theme in seconds.</p>
-</blockquote>
-<h2 id="搭建博客所需工具"><a href="#搭建博客所需工具" class="headerlink" title="搭建博客所需工具"></a>搭建博客所需工具</h2><ul>
-<li><a href="http://nodejs.org/" target="_blank" rel="external">Node.js</a></li>
-<li><a href="http://git-scm.com/" target="_blank" rel="external">Git</a></li>
-</ul>
-<h2 id="安装hexo"><a href="#安装hexo" class="headerlink" title="安装hexo"></a>安装hexo</h2><p>如果你已经搭建好Node.js环境，那么你就可以在终端通过npm命令安装hexo。命令如下：<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ sudo npm install -g hexo-cli</div></pre></td></tr></table></figure></p>
-<p>安装后可通过在终端输入<code>hexo</code>测试是否安装成功：<br><img src="http://o9w932hp8.bkt.clouddn.com/2016-07-06%2017-46-05%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE.png" alt="Alt text"></p>
-<h2 id="初始化博客"><a href="#初始化博客" class="headerlink" title="初始化博客"></a>初始化博客</h2><p>通过使用如下命令可初始化自己的博客:<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hexo init &lt;folder&gt;</div></pre></td></tr></table></figure></p>
-<p>其中<code>&lt;folder&gt;</code>是你博客的路径，如<code>～/myBlog/</code>。当然我们也可以先<code>cd</code>到博客<code>myBlog</code>文件夹中然后再使用<code>$ hexo init</code>命令初始化博客。<br>现在博客已经初始化完成！我们可以先通过<code>$ hexo generate</code>或<code>$ hexo g</code>命令生成博客的静态文件，然后再通过<code>$ hexo server</code>或<code>$ hexo s</code>命令启动本地博客服务。在浏览器中输入 <code>http://localhost:4000</code>便可查看我们搭建好的博客。<br><img src="http://o9w932hp8.bkt.clouddn.com/2016-07-06%2018-06-24%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE.png" alt="Alt text"></p>
-<h2 id="为博客更换主题"><a href="#为博客更换主题" class="headerlink" title="为博客更换主题"></a>为博客更换主题</h2><p>搭建好的博客具有如下结构：</p>
+        <p>最近在看<a href="https://book.douban.com/subject/26206050/" target="_blank" rel="external">《Hadoop权威指南(第3版)》</a>这本书，作者对hadoop生态系统的讲解十分通俗易懂，再加上大量的代码示例，实在是一本hadoop入门的优秀教材。 一开始我是用maven搭建的hadoop环境运行书中的代码，配置什么的都不需要我去处理。但是书中都是直接通过命令行运行，所以我也想尝试一下使用hadoop命令来运行代码。<br>以<code>第3章 Hadoop分布式文件系统</code>中的<code>3.5.1 从Hadoop URL读取数据</code>的代码为例，我们先照着书把代码写好，这里命名为<code>URLCat.java</code>。</p>
 <blockquote>
-<p>├── _config.yml<br>├── package.json<br>├── scaffolds<br>├── source<br> &nbsp;|  &nbsp; &nbsp; &nbsp;├── _drafts<br>&nbsp;|   &nbsp; &nbsp; &nbsp;└── _posts<br>└── themes</p>
+<p>注意不要忘了加上各种 <em>import</em></p>
 </blockquote>
-<p>其中<code>themes</code>文件夹中存放了博客的主题<br><img src="http://o9w932hp8.bkt.clouddn.com/2016-07-06%2018-15-07%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE.png" alt="Alt text"><br>如图所示，<code>landscape</code>和<code>next</code>就是两个不同的主题，以安装<code>next</code>主题为例，我们首先将主题下载到<code>themes</code>文件夹中，然后打开博客根目录下的配置文件<code>_config.yml</code>，将’theme‘一项的<code>landscape</code>替换为<code>next</code>就可以了。<br>接下来我们通过<code>$ hexo clean</code>命令清空博客缓存，<code>$ hexo g</code>命令重新生成博客静态文件以及<code>$ hexo s</code>命令启动本地服务。可以看到，我们的博客已经应用了新的主题。<br><img src="http://o9w932hp8.bkt.clouddn.com/2016-07-06%2018-25-00%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE.png" alt="Alt text"></p>
-<h2 id="发布博文"><a href="#发布博文" class="headerlink" title="发布博文"></a>发布博文</h2><p>使用如下命令可以新建一篇博文<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hexo new 博文标题</div></pre></td></tr></table></figure></p>
-<p>我们以本篇博文为例新建一篇博文<br><strong>1.新建博文</strong><br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hexo new hexo博客搭建\ ---\ 基础部分</div></pre></td></tr></table></figure></p>
-<p>新建好的博文可以在博客根目录下的<code>source/_posts</code>中找到<br><strong>2.打开新建的博文，写入自己的内容</strong><br>刚才新建好的博文如图所示：<br><img src="http://o9w932hp8.bkt.clouddn.com/2016-07-06%2018-40-58%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE.png" alt="Alt text"><br>我们需要在里面填写博文的正文，这样一篇新的文章就写好了，我们通过和之前一样的清空缓存、重新生成静态文件、启动服务等一系列操作可以看到新的博文已经出现在我们的博客中了。<br><img src="http://o9w932hp8.bkt.clouddn.com/2016-07-06%2018-47-10%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE.png" alt="Alt text"><br>当然，我们也可以不使用<code>$ hexo new 博文标题</code>来生成新的文章，只要你把符合格式的<code>markdown</code>文件放入<code>_posts</code>文件夹中就可以了。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">import</span> java.io.InputStream;</div><div class="line"><span class="keyword">import</span> java.net.URL;</div><div class="line"><span class="keyword">import</span> org.apache.hadoop.fs.FsUrlStreamHandlerFactory;</div><div class="line"><span class="keyword">import</span> org.apache.hadoop.io.IOUtils;</div><div class="line"></div><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">URLCat</span> </span>&#123;</div><div class="line">	<span class="keyword">static</span> &#123;</div><div class="line">		URL.setURLStreamHandlerFactory(<span class="keyword">new</span> FsUrlStreamHandlerFactory());</div><div class="line">	&#125; </div><div class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> Exception </span>&#123;</div><div class="line">		InputStream in = <span class="keyword">null</span>;</div><div class="line">		<span class="keyword">try</span> &#123;</div><div class="line">			in = <span class="keyword">new</span> URL(args[<span class="number">0</span>]).openStream();</div><div class="line">			IOUtils.copyBytes(in, System.out, <span class="number">4096</span>, <span class="keyword">false</span>);</div><div class="line">		&#125; <span class="keyword">finally</span> &#123;</div><div class="line">			IOUtils.closeStream(in);</div><div class="line">		&#125;</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>接着我们进行编译，进入<code>URLCat.java</code>所在的目录执行以下命令：<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ javac -classpath ~/softwares/hadoop-2.7.3/share/hadoop/common/hadoop-common-2.7.3.jar URLCat.java</div></pre></td></tr></table></figure></p>
+<blockquote>
+<p>编译时使用了<code>classpath</code>指定引入类的路径，如果你已经在环境变量中配置了hadoop的相关路径则不需要该参数。在较早版本的hadoop中直接引入<code>hadoop-core-x.y.z.jar</code>就可以将所有的的依赖解决了。但是从<code>hadoop 2.0</code>来就没有<code>hadoop-core-x.y.z.jar</code>这个文件了，取而代之的是多个分散的jar包，用户可以根据需要引入相应的包进行编译。感觉挺麻烦的:( ，这里我们就使用了<code>hadoop-common-2.7.3.jar</code>这个包。</p>
+</blockquote>
+<p><img src="http://o9w932hp8.bkt.clouddn.com/2016-10-07%2001-39-24%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE.png" alt="编译生成URLCat.class"></p>
+<p>按照书上的介绍，我们可以直接使用 <code>hadoop CLASSNAME</code>命令运行程序，但是我这样做一直被提示<code>错误: 找不到或无法加载主类</code>。在网上找了各种解决办法然而问题依旧存在。</p>
+<p><img src="http://o9w932hp8.bkt.clouddn.com/2016-10-07%2001-43-51%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE.png" alt="使用hadoop CLASSNAME 报错"></p>
+<p>没办法，我只好尝试另一个命令——<code>hadoop jar</code>，将编译好的<code>URLCat.class</code>文件打包，然后用该命令运行。命令如下：<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">$ <span class="built_in">cd</span> Test 			<span class="comment">#进入 URLCat.class 文件所在目录</span></div><div class="line">$ jar -cvf URLCat.jar URLCat.class</div></pre></td></tr></table></figure></p>
+<p><img src="http://o9w932hp8.bkt.clouddn.com/2016-10-07%2001-50-40%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE.png" alt="生成jar包"></p>
+<p>这样我们就可以使用<code>hadoop jar</code>命令运行我们的代码了。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ bin/hadoop jar Test/URLCat.jar URLCat hdfs://localhost:9001/user/cyao/test.txt</div></pre></td></tr></table></figure>
+<p>可以看到<code>test.txt</code>里的内容已经显示出来了。</p>
+<p><img src="http://o9w932hp8.bkt.clouddn.com/2016-10-07%2002-10-11%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE.png" alt="运行jar文件"></p>
+<blockquote>
+<p> 关于hadoop安装和使用HDFS的内容书中已经详细说明了，所以这里就不再细述。另外在我的电脑上<strong>HDFS的默认端口</strong><code>9000</code>已经被占用，所以我通过<code>core-site.xml</code>配置文件重新指定了<code>9001</code>端口。</p>
+</blockquote>
 
       
     </div>
@@ -427,9 +409,9 @@ Git
       
         <div class="post-tags">
           
-            <a href="/tags/hexo/" rel="tag">#hexo</a>
+            <a href="/tags/hadoop/" rel="tag">#hadoop</a>
           
-            <a href="/tags/博客/" rel="tag">#博客</a>
+            <a href="/tags/Java/" rel="tag">#Java</a>
           
         </div>
       
@@ -438,13 +420,13 @@ Git
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
+              <a href="/2016-09-06/CCF试题——有趣的数/" rel="next" title="CCF试题——有趣的数">
+                <i class="fa fa-chevron-left"></i> CCF试题——有趣的数
+              </a>
+            
           </div>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2016-09-06/CCF试题——有趣的数/" rel="prev" title="CCF试题——有趣的数">
-                CCF试题——有趣的数 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -493,8 +475,8 @@ Git
           
   <div class="comments" id="comments">
     
-      <div class="ds-thread" data-thread-key="2016-07-06/hexo博客搭建-基础部分/"
-           data-title="hexo博客搭建 --- 基础部分" data-url="http://yaochg.com/2016-07-06/hexo博客搭建-基础部分/">
+      <div class="ds-thread" data-thread-key="2016-10-07/使用hadoop命令运行程序（hadoop-2-7-3）/"
+           data-title="使用hadoop命令运行程序（hadoop 2.7.3）" data-url="http://yaochg.com/2016-10-07/使用hadoop命令运行程序（hadoop-2-7-3）/">
       </div>
     
   </div>
@@ -623,7 +605,7 @@ Git
               
             
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#搭建博客所需工具"><span class="nav-number">1.</span> <span class="nav-text">搭建博客所需工具</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#安装hexo"><span class="nav-number">2.</span> <span class="nav-text">安装hexo</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#初始化博客"><span class="nav-number">3.</span> <span class="nav-text">初始化博客</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#为博客更换主题"><span class="nav-number">4.</span> <span class="nav-text">为博客更换主题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#发布博文"><span class="nav-number">5.</span> <span class="nav-text">发布博文</span></a></li></ol></div>
+              <p class="post-toc-empty">此文章未包含目录</p>
             
           </div>
         </section>
