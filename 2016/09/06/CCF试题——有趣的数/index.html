@@ -5,9 +5,9 @@
   
 
 
-<html class="theme-next mist use-motion">
+<html class="theme-next pisces use-motion">
 <head>
-  <meta charset="UTF-8"/>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
 
@@ -94,7 +94,7 @@
 因此，符合我们定义的最小的有趣的数是2013。除此以外，4位的有趣的数还有两个：2031和2301。请计算恰好有n位的有趣的数的个数。由于答案可能非常大，只需要输出答案除以1000000007的">
 <meta property="og:type" content="article">
 <meta property="og:title" content="CCF试题——有趣的数">
-<meta property="og:url" content="http://yaochg.com/2016-09-06/CCF试题——有趣的数/index.html">
+<meta property="og:url" content="http://yaochg.com/2016/09/06/CCF试题——有趣的数/index.html">
 <meta property="og:site_name" content="YaoC's Blog">
 <meta property="og:description" content="题目问题描述
 我们把一个数称为有趣的，当且仅当：
@@ -127,7 +127,7 @@
 <script type="text/javascript" id="hexo.configuration">
   var NexT = window.NexT || {};
   var CONFIG = {
-    scheme: 'Mist',
+    scheme: 'Pisces',
     sidebar: {"position":"left","display":"post"},
     fancybox: true,
     motion: true,
@@ -141,9 +141,9 @@
 
 
 
-  <link rel="canonical" href="http://yaochg.com/2016-09-06/CCF试题——有趣的数/"/>
+  <link rel="canonical" href="http://yaochg.com/2016/09/06/CCF试题——有趣的数/"/>
 
-  <title> CCF试题——有趣的数 | YaoC's Blog </title>
+  <title> CCF试题——有趣的数 | YaoC's Blog </title><!-- hexo-inject:begin --><!-- hexo-inject:end -->
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
@@ -151,16 +151,6 @@
   
 
 
-
-  <script type="text/javascript">
-    var _hmt = _hmt || [];
-    (function() {
-      var hm = document.createElement("script");
-      hm.src = "//hm.baidu.com/hm.js?bbc93567f67d7442d804f8b7690507b3";
-      var s = document.getElementsByTagName("script")[0];
-      s.parentNode.insertBefore(hm, s);
-    })();
-  </script>
 
 
 
@@ -174,7 +164,7 @@
     
   
 
-  <div class="container one-collumn sidebar-position-left page-post-detail ">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container one-collumn sidebar-position-left page-post-detail ">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
@@ -242,16 +232,6 @@
               <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
             
             标签
-          </a>
-        </li>
-      
-        
-        <li class="menu-item menu-item-about">
-          <a href="/about" rel="section">
-            
-              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
-            
-            关于
           </a>
         </li>
       
@@ -335,8 +315,8 @@
             
               <span class="post-comments-count">
                 &nbsp; | &nbsp;
-                <a href="/2016-09-06/CCF试题——有趣的数/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016-09-06/CCF试题——有趣的数/" itemprop="commentsCount"></span>
+                <a href="/2016/09/06/CCF试题——有趣的数/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/09/06/CCF试题——有趣的数/" itemprop="commentsCount"></span>
                 </a>
               </span>
             
@@ -346,7 +326,7 @@
 
           
           
-             <span id="/2016-09-06/CCF试题——有趣的数/" class="leancloud_visitors" data-flag-title="CCF试题——有趣的数">
+             <span id="/2016/09/06/CCF试题——有趣的数/" class="leancloud_visitors" data-flag-title="CCF试题——有趣的数">
                &nbsp; | &nbsp;
                <span class="post-meta-item-icon">
                  <i class="fa fa-eye"></i>
@@ -390,6 +370,7 @@
 <p>3</p>
 </blockquote>
 <h2 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h2><p>根据题目中<code>0在1之前</code>、<code>2在3之前</code>以及<code>最高位不为0</code>我们可以推出<code>2</code>一定会出现在首位。考虑<strong>一个有趣的数的前k位</strong>只使用了部分数的情况，我们可以发现状态集中一共有6种情况：</p>
+<div class="table-container">
 <table>
 <thead>
 <tr>
@@ -431,6 +412,7 @@
 </tr>
 </tbody>
 </table>
+</div>
 <blockquote>
 <p><strong>注意</strong><br>只有以上6种情况满足题目约束，以<code>使用数字2、1 未使用数字3、0</code>为例，前<code>k</code>位中有<code>1</code>，后<code>n-k</code>位中一定会存在<code>0</code>与题目约束<code>0在1之前</code>不符，故排除。其它情况皆如此。</p>
 </blockquote>
@@ -482,7 +464,7 @@
       
         
   <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
-    <div>坚持原创技术分享，您的支持将鼓励我继续创作！</div>
+    <div></div>
     <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
       <span>赏</span>
     </button>
@@ -523,7 +505,7 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2016-07-06/hexo博客搭建-基础部分/" rel="next" title="hexo博客搭建 --- 基础部分">
+              <a href="/2016/07/06/hexo博客搭建-基础部分/" rel="next" title="hexo博客搭建 --- 基础部分">
                 <i class="fa fa-chevron-left"></i> hexo博客搭建 --- 基础部分
               </a>
             
@@ -531,7 +513,7 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2016-10-07/使用hadoop命令运行程序（hadoop-2-7-3）/" rel="prev" title="使用hadoop命令运行程序（hadoop 2.7.3）">
+              <a href="/2016/10/07/使用hadoop命令运行程序（hadoop-2-7-3）/" rel="prev" title="使用hadoop命令运行程序（hadoop 2.7.3）">
                 使用hadoop命令运行程序（hadoop 2.7.3） <i class="fa fa-chevron-right"></i>
               </a>
             
@@ -578,12 +560,15 @@
           </div>
           
 
+  <p>热评文章</p>
+  <div class="ds-top-threads" data-range="weekly" data-num-items="4"></div>
+
 
           
   <div class="comments" id="comments">
     
-      <div class="ds-thread" data-thread-key="2016-09-06/CCF试题——有趣的数/"
-           data-title="CCF试题——有趣的数" data-url="http://yaochg.com/2016-09-06/CCF试题——有趣的数/">
+      <div class="ds-thread" data-thread-key="2016/09/06/CCF试题——有趣的数/"
+           data-title="CCF试题——有趣的数" data-url="http://yaochg.com/2016/09/06/CCF试题——有趣的数/">
       </div>
     
   </div>
@@ -620,15 +605,15 @@
       <section class="site-overview sidebar-panel ">
         <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
           <img class="site-author-image" itemprop="image"
-               src="/images/yao.jpg"
+               src="/images/avatar.jpg"
                alt="Cheng Yao" />
           <p class="site-author-name" itemprop="name">Cheng Yao</p>
-          <p class="site-description motion-element" itemprop="description">You'll never walk alone !</p>
+          <p class="site-description motion-element" itemprop="description">You'll never walk alone</p>
         </div>
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">3</span>
+              <span class="site-state-item-count">4</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
@@ -645,7 +630,7 @@
           
             <div class="site-state-item site-state-tags">
               <a href="/tags">
-                <span class="site-state-item-count">7</span>
+                <span class="site-state-item-count">10</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>
@@ -668,11 +653,11 @@
               </span>
             
               <span class="links-of-author-item">
-                <a href="https://twitter.com/lfcchengyao" target="_blank" title="Twitter">
+                <a href="mailto:chengyao09@hotmail.com" target="_blank" title="邮箱">
                   
-                    <i class="fa fa-fw fa-twitter"></i>
+                    <i class="fa fa-fw fa-envelope"></i>
                   
-                  Twitter
+                  邮箱
                 </a>
               </span>
             
@@ -745,7 +730,7 @@
 <div class="theme-info">
   主题 -
   <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
-    NexT.Mist
+    NexT.Pisces
   </a>
 </div>
 
@@ -811,6 +796,13 @@
   
   
 
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.0.1"></script>
+
+
+
   
   <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
 <script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
@@ -857,26 +849,6 @@
   
   
   
-  <script type="text/x-mathjax-config">
-    MathJax.Hub.Config({
-      tex2jax: {
-        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
-        processEscapes: true,
-        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
-      }
-    });
-  </script>
-
-  <script type="text/x-mathjax-config">
-    MathJax.Hub.Queue(function() {
-      var all = MathJax.Hub.getAllJax(), i;
-      for (i=0; i < all.length; i += 1) {
-        all[i].SourceElement().parentNode.className += ' has-jax';
-      }
-    });
-  </script>
-  <script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-
 
   
 
@@ -983,7 +955,24 @@
         showTime(Counter);
       }
     });
-  </script>
+  </script><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config("");
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
 
 
 
