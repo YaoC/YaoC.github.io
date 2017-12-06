@@ -7,7 +7,7 @@
 
 <html class="theme-next pisces use-motion">
 <head>
-  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8"/>
+  <meta charset="UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
 
@@ -85,16 +85,18 @@
 
 
 <meta name="description" content="最近在看《Hadoop权威指南(第3版)》这本书，作者对hadoop生态系统的讲解十分通俗易懂，再加上大量的代码示例，实在是一本hadoop入门的优秀教材。 一开始我是用maven搭建的hadoop环境运行书中的代码，配置什么的都不需要我去处理。但是书中都是直接通过命令行运行，所以我也想尝试一下使用hadoop命令来运行代码。以第3章 Hadoop分布式文件系统中的3.5.1 从Hadoop UR">
+<meta name="keywords" content="hadoop,Java">
 <meta property="og:type" content="article">
 <meta property="og:title" content="使用hadoop命令运行程序（hadoop 2.7.3）">
 <meta property="og:url" content="http://yaochg.com/2016/10/07/使用hadoop命令运行程序（hadoop-2-7-3）/index.html">
-<meta property="og:site_name" content="YaoC's Blog">
+<meta property="og:site_name" content="YaoC&#39;s Blog">
 <meta property="og:description" content="最近在看《Hadoop权威指南(第3版)》这本书，作者对hadoop生态系统的讲解十分通俗易懂，再加上大量的代码示例，实在是一本hadoop入门的优秀教材。 一开始我是用maven搭建的hadoop环境运行书中的代码，配置什么的都不需要我去处理。但是书中都是直接通过命令行运行，所以我也想尝试一下使用hadoop命令来运行代码。以第3章 Hadoop分布式文件系统中的3.5.1 从Hadoop UR">
+<meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="http://o9w932hp8.bkt.clouddn.com/2016-10-07%2001-39-24%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE.png">
 <meta property="og:image" content="http://o9w932hp8.bkt.clouddn.com/2016-10-07%2001-43-51%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE.png">
 <meta property="og:image" content="http://o9w932hp8.bkt.clouddn.com/2016-10-07%2001-50-40%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE.png">
 <meta property="og:image" content="http://o9w932hp8.bkt.clouddn.com/2016-10-07%2002-10-11%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE.png">
-<meta property="og:updated_time" content="2016-10-06T18:18:42.400Z">
+<meta property="og:updated_time" content="2016-10-06T18:18:42.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="使用hadoop命令运行程序（hadoop 2.7.3）">
 <meta name="twitter:description" content="最近在看《Hadoop权威指南(第3版)》这本书，作者对hadoop生态系统的讲解十分通俗易懂，再加上大量的代码示例，实在是一本hadoop入门的优秀教材。 一开始我是用maven搭建的hadoop环境运行书中的代码，配置什么的都不需要我去处理。但是书中都是直接通过命令行运行，所以我也想尝试一下使用hadoop命令来运行代码。以第3章 Hadoop分布式文件系统中的3.5.1 从Hadoop UR">
@@ -121,7 +123,7 @@
 
   <link rel="canonical" href="http://yaochg.com/2016/10/07/使用hadoop命令运行程序（hadoop-2-7-3）/"/>
 
-  <title> 使用hadoop命令运行程序（hadoop 2.7.3） | YaoC's Blog </title><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  <title> 使用hadoop命令运行程序（hadoop 2.7.3） | YaoC's Blog </title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
@@ -142,7 +144,7 @@
     
   
 
-  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container one-collumn sidebar-position-left page-post-detail ">
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
@@ -326,22 +328,22 @@
       
 
       
-        <p>最近在看<a href="https://book.douban.com/subject/26206050/" target="_blank" rel="external">《Hadoop权威指南(第3版)》</a>这本书，作者对hadoop生态系统的讲解十分通俗易懂，再加上大量的代码示例，实在是一本hadoop入门的优秀教材。 一开始我是用maven搭建的hadoop环境运行书中的代码，配置什么的都不需要我去处理。但是书中都是直接通过命令行运行，所以我也想尝试一下使用hadoop命令来运行代码。<br>以<code>第3章 Hadoop分布式文件系统</code>中的<code>3.5.1 从Hadoop URL读取数据</code>的代码为例，我们先照着书把代码写好，这里命名为<code>URLCat.java</code>。</p>
+        <p>最近在看<a href="https://book.douban.com/subject/26206050/" target="_blank" rel="noopener">《Hadoop权威指南(第3版)》</a>这本书，作者对hadoop生态系统的讲解十分通俗易懂，再加上大量的代码示例，实在是一本hadoop入门的优秀教材。 一开始我是用maven搭建的hadoop环境运行书中的代码，配置什么的都不需要我去处理。但是书中都是直接通过命令行运行，所以我也想尝试一下使用hadoop命令来运行代码。<br>以<code>第3章 Hadoop分布式文件系统</code>中的<code>3.5.1 从Hadoop URL读取数据</code>的代码为例，我们先照着书把代码写好，这里命名为<code>URLCat.java</code>。</p>
 <blockquote>
 <p>注意不要忘了加上各种 <em>import</em></p>
 </blockquote>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">import</span> java.io.InputStream;</div><div class="line"><span class="keyword">import</span> java.net.URL;</div><div class="line"><span class="keyword">import</span> org.apache.hadoop.fs.FsUrlStreamHandlerFactory;</div><div class="line"><span class="keyword">import</span> org.apache.hadoop.io.IOUtils;</div><div class="line"></div><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">URLCat</span> </span>&#123;</div><div class="line">	<span class="keyword">static</span> &#123;</div><div class="line">		URL.setURLStreamHandlerFactory(<span class="keyword">new</span> FsUrlStreamHandlerFactory());</div><div class="line">	&#125; </div><div class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> Exception </span>&#123;</div><div class="line">		InputStream in = <span class="keyword">null</span>;</div><div class="line">		<span class="keyword">try</span> &#123;</div><div class="line">			in = <span class="keyword">new</span> URL(args[<span class="number">0</span>]).openStream();</div><div class="line">			IOUtils.copyBytes(in, System.out, <span class="number">4096</span>, <span class="keyword">false</span>);</div><div class="line">		&#125; <span class="keyword">finally</span> &#123;</div><div class="line">			IOUtils.closeStream(in);</div><div class="line">		&#125;</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p>接着我们进行编译，进入<code>URLCat.java</code>所在的目录执行以下命令：<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ javac -classpath ~/softwares/hadoop-2.7.3/share/hadoop/common/hadoop-common-2.7.3.jar URLCat.java</div></pre></td></tr></table></figure></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> java.io.InputStream;</span><br><span class="line"><span class="keyword">import</span> java.net.URL;</span><br><span class="line"><span class="keyword">import</span> org.apache.hadoop.fs.FsUrlStreamHandlerFactory;</span><br><span class="line"><span class="keyword">import</span> org.apache.hadoop.io.IOUtils;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">URLCat</span> </span>&#123;</span><br><span class="line">	<span class="keyword">static</span> &#123;</span><br><span class="line">		URL.setURLStreamHandlerFactory(<span class="keyword">new</span> FsUrlStreamHandlerFactory());</span><br><span class="line">	&#125; </span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">		InputStream in = <span class="keyword">null</span>;</span><br><span class="line">		<span class="keyword">try</span> &#123;</span><br><span class="line">			in = <span class="keyword">new</span> URL(args[<span class="number">0</span>]).openStream();</span><br><span class="line">			IOUtils.copyBytes(in, System.out, <span class="number">4096</span>, <span class="keyword">false</span>);</span><br><span class="line">		&#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">			IOUtils.closeStream(in);</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>接着我们进行编译，进入<code>URLCat.java</code>所在的目录执行以下命令：<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ javac -classpath ~/softwares/hadoop-2.7.3/share/hadoop/common/hadoop-common-2.7.3.jar URLCat.java</span><br></pre></td></tr></table></figure></p>
 <blockquote>
 <p>编译时使用了<code>classpath</code>指定引入类的路径，如果你已经在环境变量中配置了hadoop的相关路径则不需要该参数。在较早版本的hadoop中直接引入<code>hadoop-core-x.y.z.jar</code>就可以将所有的的依赖解决了。但是从<code>hadoop 2.0</code>来就没有<code>hadoop-core-x.y.z.jar</code>这个文件了，取而代之的是多个分散的jar包，用户可以根据需要引入相应的包进行编译。感觉挺麻烦的:( ，这里我们就使用了<code>hadoop-common-2.7.3.jar</code>这个包。</p>
 </blockquote>
 <p><img src="http://o9w932hp8.bkt.clouddn.com/2016-10-07%2001-39-24%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE.png" alt="编译生成URLCat.class"></p>
 <p>按照书上的介绍，我们可以直接使用 <code>hadoop CLASSNAME</code>命令运行程序，但是我这样做一直被提示<code>错误: 找不到或无法加载主类</code>。在网上找了各种解决办法然而问题依旧存在。</p>
 <p><img src="http://o9w932hp8.bkt.clouddn.com/2016-10-07%2001-43-51%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE.png" alt="使用hadoop CLASSNAME 报错"></p>
-<p>没办法，我只好尝试另一个命令——<code>hadoop jar</code>，将编译好的<code>URLCat.class</code>文件打包，然后用该命令运行。命令如下：<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">$ <span class="built_in">cd</span> Test 			<span class="comment">#进入 URLCat.class 文件所在目录</span></div><div class="line">$ jar -cvf URLCat.jar URLCat.class</div></pre></td></tr></table></figure></p>
+<p>没办法，我只好尝试另一个命令——<code>hadoop jar</code>，将编译好的<code>URLCat.class</code>文件打包，然后用该命令运行。命令如下：<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ <span class="built_in">cd</span> Test 			<span class="comment">#进入 URLCat.class 文件所在目录</span></span><br><span class="line">$ jar -cvf URLCat.jar URLCat.class</span><br></pre></td></tr></table></figure></p>
 <p><img src="http://o9w932hp8.bkt.clouddn.com/2016-10-07%2001-50-40%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE.png" alt="生成jar包"></p>
 <p>这样我们就可以使用<code>hadoop jar</code>命令运行我们的代码了。</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ bin/hadoop jar Test/URLCat.jar URLCat hdfs://localhost:9001/user/cyao/test.txt</div></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ bin/hadoop jar Test/URLCat.jar URLCat hdfs://localhost:9001/user/cyao/test.txt</span><br></pre></td></tr></table></figure>
 <p>可以看到<code>test.txt</code>里的内容已经显示出来了。</p>
 <p><img src="http://o9w932hp8.bkt.clouddn.com/2016-10-07%2002-10-11%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE.png" alt="运行jar文件"></p>
 <blockquote>
@@ -508,7 +510,7 @@
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">4</span>
+              <span class="site-state-item-count">5</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
@@ -525,7 +527,7 @@
           
             <div class="site-state-item site-state-tags">
               <a href="/tags">
-                <span class="site-state-item-count">10</span>
+                <span class="site-state-item-count">11</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>
@@ -611,7 +613,7 @@
         <div class="copyright" >
   
   &copy; 
-  <span itemprop="copyrightYear">2016</span>
+  <span itemprop="copyrightYear">2017</span>
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>
@@ -850,24 +852,7 @@
         showTime(Counter);
       }
     });
-  </script><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
-<script type="text/x-mathjax-config">
-  MathJax.Hub.Config("");
-</script>
-
-<script type="text/x-mathjax-config">
-  MathJax.Hub.Queue(function() {
-    var all = MathJax.Hub.getAllJax(), i;
-    for(i=0; i < all.length; i += 1) {
-      all[i].SourceElement().parentNode.className += ' has-jax';
-    }
-  });
-</script>
-
-<script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
-</script>
-<!-- End: Injected MathJax -->
-<!-- hexo-inject:end -->
+  </script>
 
 
 

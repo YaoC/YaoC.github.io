@@ -68,7 +68,7 @@
 <link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="hexo,博客," />
+  <meta name="keywords" content="hadoop,Java,MapReduce," />
 
 
 
@@ -84,25 +84,20 @@
 
 
 
-<meta name="description" content="Hexo is a fast, simple and powerful blog framework. You write posts in Markdown (or other languages) and Hexo generates static files with a beautiful theme in seconds.  搭建博客所需工具 Node.js Git  安装hexo如果">
-<meta name="keywords" content="hexo,博客">
+<meta name="description" content="在 MapReduce 的输出结果中，每一个 Key 可能对应了不止一个 Value，我们需要让对应同一个 Key 的多个Value 按照一定的顺序排列，一种方法是在 Reduce 完成后对同一个 Key 对应的 Value 进行排序，但是对于 MapReduce 这样一个应用在大数据场景中的计算框架来说这种方法显然是不理想的，因为一个 Key 对应的 Value 可能有很多，以至于无法在单机内存">
+<meta name="keywords" content="hadoop,Java,MapReduce">
 <meta property="og:type" content="article">
-<meta property="og:title" content="hexo博客搭建 --- 基础部分">
-<meta property="og:url" content="http://yaochg.com/2016/07/06/hexo博客搭建-基础部分/index.html">
+<meta property="og:title" content="Hadoop 二次排序">
+<meta property="og:url" content="http://yaochg.com/2017/12/06/Hadoop-二次排序/index.html">
 <meta property="og:site_name" content="YaoC&#39;s Blog">
-<meta property="og:description" content="Hexo is a fast, simple and powerful blog framework. You write posts in Markdown (or other languages) and Hexo generates static files with a beautiful theme in seconds.  搭建博客所需工具 Node.js Git  安装hexo如果">
+<meta property="og:description" content="在 MapReduce 的输出结果中，每一个 Key 可能对应了不止一个 Value，我们需要让对应同一个 Key 的多个Value 按照一定的顺序排列，一种方法是在 Reduce 完成后对同一个 Key 对应的 Value 进行排序，但是对于 MapReduce 这样一个应用在大数据场景中的计算框架来说这种方法显然是不理想的，因为一个 Key 对应的 Value 可能有很多，以至于无法在单机内存">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="http://o9w932hp8.bkt.clouddn.com/2016-07-06%2017-46-05%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE.png">
-<meta property="og:image" content="http://o9w932hp8.bkt.clouddn.com/2016-07-06%2018-06-24%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE.png">
-<meta property="og:image" content="http://o9w932hp8.bkt.clouddn.com/2016-07-06%2018-15-07%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE.png">
-<meta property="og:image" content="http://o9w932hp8.bkt.clouddn.com/2016-07-06%2018-25-00%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE.png">
-<meta property="og:image" content="http://o9w932hp8.bkt.clouddn.com/2016-07-06%2018-40-58%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE.png">
-<meta property="og:image" content="http://o9w932hp8.bkt.clouddn.com/2016-07-06%2018-47-10%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE.png">
-<meta property="og:updated_time" content="2016-09-06T06:35:36.000Z">
+<meta property="og:image" content="http://o9w932hp8.bkt.clouddn.com/C988D694D352B7ADD438FC6E12CCCECB.jpg">
+<meta property="og:updated_time" content="2017-12-06T12:50:29.687Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="hexo博客搭建 --- 基础部分">
-<meta name="twitter:description" content="Hexo is a fast, simple and powerful blog framework. You write posts in Markdown (or other languages) and Hexo generates static files with a beautiful theme in seconds.  搭建博客所需工具 Node.js Git  安装hexo如果">
-<meta name="twitter:image" content="http://o9w932hp8.bkt.clouddn.com/2016-07-06%2017-46-05%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE.png">
+<meta name="twitter:title" content="Hadoop 二次排序">
+<meta name="twitter:description" content="在 MapReduce 的输出结果中，每一个 Key 可能对应了不止一个 Value，我们需要让对应同一个 Key 的多个Value 按照一定的顺序排列，一种方法是在 Reduce 完成后对同一个 Key 对应的 Value 进行排序，但是对于 MapReduce 这样一个应用在大数据场景中的计算框架来说这种方法显然是不理想的，因为一个 Key 对应的 Value 可能有很多，以至于无法在单机内存">
+<meta name="twitter:image" content="http://o9w932hp8.bkt.clouddn.com/C988D694D352B7ADD438FC6E12CCCECB.jpg">
 
 
 
@@ -123,9 +118,9 @@
 
 
 
-  <link rel="canonical" href="http://yaochg.com/2016/07/06/hexo博客搭建-基础部分/"/>
+  <link rel="canonical" href="http://yaochg.com/2017/12/06/Hadoop-二次排序/"/>
 
-  <title> hexo博客搭建 --- 基础部分 | YaoC's Blog </title>
+  <title> Hadoop 二次排序 | YaoC's Blog </title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
@@ -255,7 +250,7 @@
             
             
               
-                hexo博客搭建 --- 基础部分
+                Hadoop 二次排序
               
             
           </h1>
@@ -267,8 +262,8 @@
               <i class="fa fa-calendar-o"></i>
             </span>
             <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2016-07-06T18:33:06+08:00" content="2016-07-06">
-              2016-07-06
+            <time itemprop="dateCreated" datetime="2017-12-06T20:43:17+08:00" content="2017-12-06">
+              2017-12-06
             </time>
           </span>
 
@@ -297,8 +292,8 @@
             
               <span class="post-comments-count">
                 &nbsp; | &nbsp;
-                <a href="/2016/07/06/hexo博客搭建-基础部分/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/07/06/hexo博客搭建-基础部分/" itemprop="commentsCount"></span>
+                <a href="/2017/12/06/Hadoop-二次排序/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2017/12/06/Hadoop-二次排序/" itemprop="commentsCount"></span>
                 </a>
               </span>
             
@@ -308,7 +303,7 @@
 
           
           
-             <span id="/2016/07/06/hexo博客搭建-基础部分/" class="leancloud_visitors" data-flag-title="hexo博客搭建 --- 基础部分">
+             <span id="/2017/12/06/Hadoop-二次排序/" class="leancloud_visitors" data-flag-title="Hadoop 二次排序">
                &nbsp; | &nbsp;
                <span class="post-meta-item-icon">
                  <i class="fa fa-eye"></i>
@@ -330,25 +325,23 @@
       
 
       
-        <blockquote>
-<p>Hexo is a fast, simple and powerful blog framework. You write posts in Markdown (or other languages) and Hexo generates static files with a beautiful theme in seconds.</p>
-</blockquote>
-<h2 id="搭建博客所需工具"><a href="#搭建博客所需工具" class="headerlink" title="搭建博客所需工具"></a>搭建博客所需工具</h2><ul>
-<li><a href="http://nodejs.org/" target="_blank" rel="noopener">Node.js</a></li>
-<li><a href="http://git-scm.com/" target="_blank" rel="noopener">Git</a></li>
+        <p>在 MapReduce 的输出结果中，每一个 Key 可能对应了不止一个 Value，我们需要让对应同一个 Key 的多个Value 按照一定的顺序排列，一种方法是在 Reduce 完成后对同一个 Key 对应的 Value 进行排序，但是对于 MapReduce 这样一个应用在大数据场景中的计算框架来说这种方法显然是不理想的，因为一个 Key 对应的 Value 可能有很多，以至于无法在单机内存中处理。理想的方法是在 MapReduce 的过程中就完成排序，由于MapReduce 的伸缩性，即使数据量很大也能高效地进行处理。另一方面，<code>MapReduce确保每个 Reducer 的输入都是按 Key 排序的（《Hadoop 权威指南》6.4 shuffle和排序 P226）</code>，因此我们可以将 Key-Value 组合成一个中间键 newKey，在 Partition 和 Group 时考虑 Key，而在比较大小时考虑 newKey， 从而利用 Reducer 按键排序输入这一特性完成排序。</p>
+<h2 id="相关代码"><a href="#相关代码" class="headerlink" title="相关代码"></a>相关代码</h2><p><a href="https://github.com/YaoC/data-algorithms-book/tree/master/src/main/java/org/dataalgorithms/chap01/mapreduce" target="_blank" rel="noopener">data-algorithms-book/chap01/mapreduce/</a></p>
+<ul>
+<li><a href="https://github.com/YaoC/data-algorithms-book/blob/master/src/main/java/org/dataalgorithms/chap01/mapreduce/DateTemperatureGroupingComparator.java" target="_blank" rel="noopener">DateTemperatureGroupingComparator</a></li>
+<li><a href="https://github.com/YaoC/data-algorithms-book/blob/master/src/main/java/org/dataalgorithms/chap01/mapreduce/DateTemperaturePair.java" target="_blank" rel="noopener">DateTemperaturePair.java</a></li>
+<li><a href="https://github.com/YaoC/data-algorithms-book/blob/master/src/main/java/org/dataalgorithms/chap01/mapreduce/DateTemperaturePartitioner.java" target="_blank" rel="noopener">DateTemperaturePartitioner.java</a></li>
+<li><a href="https://github.com/YaoC/data-algorithms-book/blob/master/src/main/java/org/dataalgorithms/chap01/mapreduce/SecondarySortDriver.java" target="_blank" rel="noopener">SecondarySortDriver.java</a></li>
+<li><a href="https://github.com/YaoC/data-algorithms-book/blob/master/src/main/java/org/dataalgorithms/chap01/mapreduce/SecondarySortMapper.java" target="_blank" rel="noopener">SecondarySortMapper.java</a></li>
+<li><a href="https://github.com/YaoC/data-algorithms-book/blob/master/src/main/java/org/dataalgorithms/chap01/mapreduce/SecondarySortReducer.java" target="_blank" rel="noopener">SecondarySortReducer.java</a></li>
 </ul>
-<h2 id="安装hexo"><a href="#安装hexo" class="headerlink" title="安装hexo"></a>安装hexo</h2><p>如果你已经搭建好Node.js环境，那么你就可以在终端通过npm命令安装hexo。命令如下：<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ sudo npm install -g hexo-cli</span><br></pre></td></tr></table></figure></p>
-<p>安装后可通过在终端输入<code>hexo</code>测试是否安装成功：<br><img src="http://o9w932hp8.bkt.clouddn.com/2016-07-06%2017-46-05%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE.png" alt="Alt text"></p>
-<h2 id="初始化博客"><a href="#初始化博客" class="headerlink" title="初始化博客"></a>初始化博客</h2><p>通过使用如下命令可初始化自己的博客:<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo init &lt;folder&gt;</span><br></pre></td></tr></table></figure></p>
-<p>其中<code>&lt;folder&gt;</code>是你博客的路径，如<code>～/myBlog/</code>。当然我们也可以先<code>cd</code>到博客<code>myBlog</code>文件夹中然后再使用<code>$ hexo init</code>命令初始化博客。<br>现在博客已经初始化完成！我们可以先通过<code>$ hexo generate</code>或<code>$ hexo g</code>命令生成博客的静态文件，然后再通过<code>$ hexo server</code>或<code>$ hexo s</code>命令启动本地博客服务。在浏览器中输入 <code>http://localhost:4000</code>便可查看我们搭建好的博客。<br><img src="http://o9w932hp8.bkt.clouddn.com/2016-07-06%2018-06-24%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE.png" alt="Alt text"></p>
-<h2 id="为博客更换主题"><a href="#为博客更换主题" class="headerlink" title="为博客更换主题"></a>为博客更换主题</h2><p>搭建好的博客具有如下结构：</p>
-<blockquote>
-<p>├── _config.yml<br>├── package.json<br>├── scaffolds<br>├── source<br> &nbsp;|  &nbsp; &nbsp; &nbsp;├── _drafts<br>&nbsp;|   &nbsp; &nbsp; &nbsp;└── _posts<br>└── themes</p>
-</blockquote>
-<p>其中<code>themes</code>文件夹中存放了博客的主题<br><img src="http://o9w932hp8.bkt.clouddn.com/2016-07-06%2018-15-07%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE.png" alt="Alt text"><br>如图所示，<code>landscape</code>和<code>next</code>就是两个不同的主题，以安装<code>next</code>主题为例，我们首先将主题下载到<code>themes</code>文件夹中，然后打开博客根目录下的配置文件<code>_config.yml</code>，将’theme‘一项的<code>landscape</code>替换为<code>next</code>就可以了。<br>接下来我们通过<code>$ hexo clean</code>命令清空博客缓存，<code>$ hexo g</code>命令重新生成博客静态文件以及<code>$ hexo s</code>命令启动本地服务。可以看到，我们的博客已经应用了新的主题。<br><img src="http://o9w932hp8.bkt.clouddn.com/2016-07-06%2018-25-00%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE.png" alt="Alt text"></p>
-<h2 id="发布博文"><a href="#发布博文" class="headerlink" title="发布博文"></a>发布博文</h2><p>使用如下命令可以新建一篇博文<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo new 博文标题</span><br></pre></td></tr></table></figure></p>
-<p>我们以本篇博文为例新建一篇博文<br><strong>1.新建博文</strong><br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo new hexo博客搭建\ ---\ 基础部分</span><br></pre></td></tr></table></figure></p>
-<p>新建好的博文可以在博客根目录下的<code>source/_posts</code>中找到<br><strong>2.打开新建的博文，写入自己的内容</strong><br>刚才新建好的博文如图所示：<br><img src="http://o9w932hp8.bkt.clouddn.com/2016-07-06%2018-40-58%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE.png" alt="Alt text"><br>我们需要在里面填写博文的正文，这样一篇新的文章就写好了，我们通过和之前一样的清空缓存、重新生成静态文件、启动服务等一系列操作可以看到新的博文已经出现在我们的博客中了。<br><img src="http://o9w932hp8.bkt.clouddn.com/2016-07-06%2018-47-10%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE.png" alt="Alt text"><br>当然，我们也可以不使用<code>$ hexo new 博文标题</code>来生成新的文章，只要你把符合格式的<code>markdown</code>文件放入<code>_posts</code>文件夹中就可以了。</p>
+<h2 id="输入样本"><a href="#输入样本" class="headerlink" title="输入样本"></a>输入样本</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># sample_input.txt</span></span><br><span class="line">2000,12,04,10</span><br><span class="line">2000,11,01,20</span><br><span class="line">2000,12,02,-20</span><br><span class="line">2000,11,07,30</span><br><span class="line">2000,11,24,-40</span><br><span class="line">2012,12,21,30</span><br><span class="line">2012,12,22,-20</span><br><span class="line">2012,12,23,60</span><br><span class="line">2012,12,24,70</span><br><span class="line">2012,12,25,10</span><br><span class="line">2013,01,22,80</span><br><span class="line">2013,01,23,90</span><br><span class="line">2013,01,24,70</span><br><span class="line">2013,01,20,-10</span><br></pre></td></tr></table></figure>
+<p><strong>格式</strong>： YYYY,MM,DD,Tempreture<br><strong>期望输出</strong>：<br>YYYYMM TempretureList （降序）</p>
+<h2 id="将数据导入-HDFS"><a href="#将数据导入-HDFS" class="headerlink" title="将数据导入 HDFS"></a>将数据导入 HDFS</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cd</span> <span class="variable">$hadoop_dir</span></span><br><span class="line">bin/hadoop fs -mkdir /secondary_sort</span><br><span class="line">bin/hadoop fs -mkdir /secondary_sort/input</span><br><span class="line">bin/hadoop fs -mkdir /secondary_sort/output</span><br><span class="line">bin/hadoop fs -put <span class="variable">$sample_input_dir</span>/sample_input.txt /secondary_sort/input/</span><br></pre></td></tr></table></figure>
+<h2 id="运行脚本"><a href="#运行脚本" class="headerlink" title="运行脚本"></a>运行脚本</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># run.sh</span></span><br><span class="line"><span class="meta">#!/bin/bash</span></span><br><span class="line"><span class="built_in">export</span> JAVA_HOME=/Library/Java/JavaVirtualMachines/jdk1.8.0_112.jdk/Contents/Home/</span><br><span class="line"><span class="built_in">echo</span> <span class="string">"JAVA_HOME=<span class="variable">$JAVA_HOME</span>"</span></span><br><span class="line"><span class="built_in">export</span> BOOK_HOME=/Users/chengyao/IdeaProjects/data-algorithms-book</span><br><span class="line"><span class="built_in">export</span> APP_JAR=<span class="variable">$BOOK_HOME</span>/target/data-algorithms-1.0.0.jar</span><br><span class="line">INPUT=/secondary_sort/input</span><br><span class="line">OUTPUT=/secondary_sort/output</span><br><span class="line"><span class="built_in">export</span> HADOOP_HOME=/Users/chengyao/Software/hadoop-2.7.3</span><br><span class="line"><span class="variable">$HADOOP_HOME</span>/bin/hadoop fs -rmr <span class="variable">$OUTPUT</span></span><br><span class="line">PROG=org.dataalgorithms.chap01.mapreduce.SecondarySortDriver</span><br><span class="line"><span class="variable">$HADOOP_HOME</span>/bin/hadoop jar <span class="variable">$APP_JAR</span> <span class="variable">$PROG</span> <span class="variable">$INPUT</span> <span class="variable">$OUTPUT</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># sudo chmod +x run.sh</span></span><br><span class="line">./run.sh</span><br></pre></td></tr></table></figure>
+<h2 id="查看运行结果"><a href="#查看运行结果" class="headerlink" title="查看运行结果"></a>查看运行结果</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">bin/hadoop fs -cat /secondary_sort/output/p*</span><br><span class="line"></span><br><span class="line">201301	90,80,70,-10,</span><br><span class="line">201212	70,60,30,10,-20,</span><br><span class="line">200012	10,-20,</span><br><span class="line">200011	30,20,-40,</span><br></pre></td></tr></table></figure>
+<p><img src="http://o9w932hp8.bkt.clouddn.com/C988D694D352B7ADD438FC6E12CCCECB.jpg" alt="IMAGE"></p>
 
       
     </div>
@@ -391,9 +384,11 @@
       
         <div class="post-tags">
           
-            <a href="/tags/hexo/" rel="tag">#hexo</a>
+            <a href="/tags/hadoop/" rel="tag">#hadoop</a>
           
-            <a href="/tags/博客/" rel="tag">#博客</a>
+            <a href="/tags/Java/" rel="tag">#Java</a>
+          
+            <a href="/tags/MapReduce/" rel="tag">#MapReduce</a>
           
         </div>
       
@@ -402,13 +397,13 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
+              <a href="/2016/10/18/隐马尔可夫模型—《统计学习方法》学习笔记/" rel="next" title="隐马尔可夫模型—《统计学习方法》学习笔记">
+                <i class="fa fa-chevron-left"></i> 隐马尔可夫模型—《统计学习方法》学习笔记
+              </a>
+            
           </div>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2016/09/06/CCF试题——有趣的数/" rel="prev" title="CCF试题——有趣的数">
-                CCF试题——有趣的数 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -460,8 +455,8 @@
           
   <div class="comments" id="comments">
     
-      <div class="ds-thread" data-thread-key="2016/07/06/hexo博客搭建-基础部分/"
-           data-title="hexo博客搭建 --- 基础部分" data-url="http://yaochg.com/2016/07/06/hexo博客搭建-基础部分/">
+      <div class="ds-thread" data-thread-key="2017/12/06/Hadoop-二次排序/"
+           data-title="Hadoop 二次排序" data-url="http://yaochg.com/2017/12/06/Hadoop-二次排序/">
       </div>
     
   </div>
@@ -590,7 +585,7 @@
               
             
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#搭建博客所需工具"><span class="nav-number">1.</span> <span class="nav-text"><a href="#&#x642D;&#x5EFA;&#x535A;&#x5BA2;&#x6240;&#x9700;&#x5DE5;&#x5177;" class="headerlink" title="&#x642D;&#x5EFA;&#x535A;&#x5BA2;&#x6240;&#x9700;&#x5DE5;&#x5177;"></a>&#x642D;&#x5EFA;&#x535A;&#x5BA2;&#x6240;&#x9700;&#x5DE5;&#x5177;</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#安装hexo"><span class="nav-number">2.</span> <span class="nav-text"><a href="#&#x5B89;&#x88C5;hexo" class="headerlink" title="&#x5B89;&#x88C5;hexo"></a>&#x5B89;&#x88C5;hexo</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#初始化博客"><span class="nav-number">3.</span> <span class="nav-text"><a href="#&#x521D;&#x59CB;&#x5316;&#x535A;&#x5BA2;" class="headerlink" title="&#x521D;&#x59CB;&#x5316;&#x535A;&#x5BA2;"></a>&#x521D;&#x59CB;&#x5316;&#x535A;&#x5BA2;</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#为博客更换主题"><span class="nav-number">4.</span> <span class="nav-text"><a href="#&#x4E3A;&#x535A;&#x5BA2;&#x66F4;&#x6362;&#x4E3B;&#x9898;" class="headerlink" title="&#x4E3A;&#x535A;&#x5BA2;&#x66F4;&#x6362;&#x4E3B;&#x9898;"></a>&#x4E3A;&#x535A;&#x5BA2;&#x66F4;&#x6362;&#x4E3B;&#x9898;</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#发布博文"><span class="nav-number">5.</span> <span class="nav-text"><a href="#&#x53D1;&#x5E03;&#x535A;&#x6587;" class="headerlink" title="&#x53D1;&#x5E03;&#x535A;&#x6587;"></a>&#x53D1;&#x5E03;&#x535A;&#x6587;</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#相关代码"><span class="nav-number">1.</span> <span class="nav-text"><a href="#&#x76F8;&#x5173;&#x4EE3;&#x7801;" class="headerlink" title="&#x76F8;&#x5173;&#x4EE3;&#x7801;"></a>&#x76F8;&#x5173;&#x4EE3;&#x7801;</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#输入样本"><span class="nav-number">2.</span> <span class="nav-text"><a href="#&#x8F93;&#x5165;&#x6837;&#x672C;" class="headerlink" title="&#x8F93;&#x5165;&#x6837;&#x672C;"></a>&#x8F93;&#x5165;&#x6837;&#x672C;</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#将数据导入-HDFS"><span class="nav-number">3.</span> <span class="nav-text"><a href="#&#x5C06;&#x6570;&#x636E;&#x5BFC;&#x5165;-HDFS" class="headerlink" title="&#x5C06;&#x6570;&#x636E;&#x5BFC;&#x5165; HDFS"></a>&#x5C06;&#x6570;&#x636E;&#x5BFC;&#x5165; HDFS</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#运行脚本"><span class="nav-number">4.</span> <span class="nav-text"><a href="#&#x8FD0;&#x884C;&#x811A;&#x672C;" class="headerlink" title="&#x8FD0;&#x884C;&#x811A;&#x672C;"></a>&#x8FD0;&#x884C;&#x811A;&#x672C;</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#查看运行结果"><span class="nav-number">5.</span> <span class="nav-text"><a href="#&#x67E5;&#x770B;&#x8FD0;&#x884C;&#x7ED3;&#x679C;" class="headerlink" title="&#x67E5;&#x770B;&#x8FD0;&#x884C;&#x7ED3;&#x679C;"></a>&#x67E5;&#x770B;&#x8FD0;&#x884C;&#x7ED3;&#x679C;</span></a></li></ol></div>
             
           </div>
         </section>

@@ -7,7 +7,7 @@
 
 <html class="theme-next pisces use-motion">
 <head>
-  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8"/>
+  <meta charset="UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
 
@@ -84,42 +84,23 @@
 
 
 
-<meta name="description" content="题目问题描述
-我们把一个数称为有趣的，当且仅当：
-
-它的数字只包含0, 1, 2, 3，且这四个数字都出现过至少一次。
-所有的0都出现在所有的1之前，而所有的2都出现在所有的3之前。
-最高位数字不为0。
-
-因此，符合我们定义的最小的有趣的数是2013。除此以外，4位的有趣的数还有两个：2031和2301。请计算恰好有n位的有趣的数的个数。由于答案可能非常大，只需要输出答案除以1000000007的">
+<meta name="description" content="题目问题描述 我们把一个数称为有趣的，当且仅当：  它的数字只包含0, 1, 2, 3，且这四个数字都出现过至少一次。 所有的0都出现在所有的1之前，而所有的2都出现在所有的3之前。 最高位数字不为0。  因此，符合我们定义的最小的有趣的数是2013。除此以外，4位的有趣的数还有两个：2031和2301。请计算恰好有n位的有趣的数的个数。由于答案可能非常大，只需要输出答案除以1000000007的">
+<meta name="keywords" content="动态规划,C++,CCF">
 <meta property="og:type" content="article">
 <meta property="og:title" content="CCF试题——有趣的数">
 <meta property="og:url" content="http://yaochg.com/2016/09/06/CCF试题——有趣的数/index.html">
-<meta property="og:site_name" content="YaoC's Blog">
-<meta property="og:description" content="题目问题描述
-我们把一个数称为有趣的，当且仅当：
-
-它的数字只包含0, 1, 2, 3，且这四个数字都出现过至少一次。
-所有的0都出现在所有的1之前，而所有的2都出现在所有的3之前。
-最高位数字不为0。
-
-因此，符合我们定义的最小的有趣的数是2013。除此以外，4位的有趣的数还有两个：2031和2301。请计算恰好有n位的有趣的数的个数。由于答案可能非常大，只需要输出答案除以1000000007的">
+<meta property="og:site_name" content="YaoC&#39;s Blog">
+<meta property="og:description" content="题目问题描述 我们把一个数称为有趣的，当且仅当：  它的数字只包含0, 1, 2, 3，且这四个数字都出现过至少一次。 所有的0都出现在所有的1之前，而所有的2都出现在所有的3之前。 最高位数字不为0。  因此，符合我们定义的最小的有趣的数是2013。除此以外，4位的有趣的数还有两个：2031和2301。请计算恰好有n位的有趣的数的个数。由于答案可能非常大，只需要输出答案除以1000000007的">
+<meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="http://o9w932hp8.bkt.clouddn.com/%E6%9C%89%E8%B6%A3%E7%9A%84%E6%95%B0.png">
 <meta property="og:image" content="http://o9w932hp8.bkt.clouddn.com/%E6%9C%89%E8%B6%A3%E7%9A%84%E6%95%B0%20%282%29.png">
 <meta property="og:image" content="http://o9w932hp8.bkt.clouddn.com/%E6%9C%89%E8%B6%A3%E7%9A%84%E6%95%B0%20%283%29.png">
 <meta property="og:image" content="http://o9w932hp8.bkt.clouddn.com/%E6%9C%89%E8%B6%A3%E7%9A%84%E6%95%B0%20%284%29.png">
 <meta property="og:image" content="http://o9w932hp8.bkt.clouddn.com/%E6%9C%89%E8%B6%A3%E7%9A%84%E6%95%B0%20%285%29.png">
-<meta property="og:updated_time" content="2016-09-06T06:35:58.571Z">
+<meta property="og:updated_time" content="2016-09-06T06:35:58.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="CCF试题——有趣的数">
-<meta name="twitter:description" content="题目问题描述
-我们把一个数称为有趣的，当且仅当：
-
-它的数字只包含0, 1, 2, 3，且这四个数字都出现过至少一次。
-所有的0都出现在所有的1之前，而所有的2都出现在所有的3之前。
-最高位数字不为0。
-
-因此，符合我们定义的最小的有趣的数是2013。除此以外，4位的有趣的数还有两个：2031和2301。请计算恰好有n位的有趣的数的个数。由于答案可能非常大，只需要输出答案除以1000000007的">
+<meta name="twitter:description" content="题目问题描述 我们把一个数称为有趣的，当且仅当：  它的数字只包含0, 1, 2, 3，且这四个数字都出现过至少一次。 所有的0都出现在所有的1之前，而所有的2都出现在所有的3之前。 最高位数字不为0。  因此，符合我们定义的最小的有趣的数是2013。除此以外，4位的有趣的数还有两个：2031和2301。请计算恰好有n位的有趣的数的个数。由于答案可能非常大，只需要输出答案除以1000000007的">
 <meta name="twitter:image" content="http://o9w932hp8.bkt.clouddn.com/%E6%9C%89%E8%B6%A3%E7%9A%84%E6%95%B0.png">
 
 
@@ -143,7 +124,7 @@
 
   <link rel="canonical" href="http://yaochg.com/2016/09/06/CCF试题——有趣的数/"/>
 
-  <title> CCF试题——有趣的数 | YaoC's Blog </title><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  <title> CCF试题——有趣的数 | YaoC's Blog </title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
@@ -164,7 +145,7 @@
     
   
 
-  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container one-collumn sidebar-position-left page-post-detail ">
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
@@ -370,7 +351,6 @@
 <p>3</p>
 </blockquote>
 <h2 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h2><p>根据题目中<code>0在1之前</code>、<code>2在3之前</code>以及<code>最高位不为0</code>我们可以推出<code>2</code>一定会出现在首位。考虑<strong>一个有趣的数的前k位</strong>只使用了部分数的情况，我们可以发现状态集中一共有6种情况：</p>
-<div class="table-container">
 <table>
 <thead>
 <tr>
@@ -412,7 +392,6 @@
 </tr>
 </tbody>
 </table>
-</div>
 <blockquote>
 <p><strong>注意</strong><br>只有以上6种情况满足题目约束，以<code>使用数字2、1 未使用数字3、0</code>为例，前<code>k</code>位中有<code>1</code>，后<code>n-k</code>位中一定会存在<code>0</code>与题目约束<code>0在1之前</code>不符，故排除。其它情况皆如此。</p>
 </blockquote>
@@ -449,7 +428,7 @@
 </blockquote>
 </li>
 </ul>
-<h2 id="C-实现"><a href="#C-实现" class="headerlink" title="C++实现"></a>C++实现</h2><figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;iostream&gt;</span></span></div><div class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></div><div class="line">&#123;</div><div class="line">	<span class="keyword">long</span> <span class="keyword">long</span> mod = <span class="number">1000000007</span>;</div><div class="line">	<span class="keyword">int</span> n;</div><div class="line">	<span class="built_in">cin</span> &gt;&gt; n;</div><div class="line">	<span class="keyword">long</span> <span class="keyword">long</span>** states = <span class="keyword">new</span> <span class="keyword">long</span> <span class="keyword">long</span>*[n+<span class="number">1</span>];</div><div class="line">	<span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt;= n; i++)</div><div class="line">		states[i] = <span class="keyword">new</span> <span class="keyword">long</span> <span class="keyword">long</span>[<span class="number">6</span>];</div><div class="line">	<span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; <span class="number">6</span>; i++)</div><div class="line">		states[<span class="number">0</span>][i] = <span class="number">0</span>;</div><div class="line">	<span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt;= n; i++)</div><div class="line">	&#123;</div><div class="line">		<span class="keyword">int</span> j = i - <span class="number">1</span>;</div><div class="line">		states[i][<span class="number">0</span>] = <span class="number">1</span>;</div><div class="line">		states[i][<span class="number">1</span>] = (states[j][<span class="number">0</span>] + states[j][<span class="number">1</span>] * <span class="number">2</span>) % mod;</div><div class="line">		states[i][<span class="number">2</span>] = (states[j][<span class="number">0</span>] + states[j][<span class="number">2</span>]) % mod;</div><div class="line">		states[i][<span class="number">3</span>] = (states[j][<span class="number">1</span>] + states[j][<span class="number">3</span>] * <span class="number">2</span>) % mod;</div><div class="line">		states[i][<span class="number">4</span>] = (states[j][<span class="number">1</span>] + states[j][<span class="number">2</span>] + states[j][<span class="number">4</span>] * <span class="number">2</span>) % mod;</div><div class="line">		states[i][<span class="number">5</span>] = (states[j][<span class="number">3</span>] + states[j][<span class="number">4</span>] + states[j][<span class="number">5</span>] * <span class="number">2</span>) % mod;</div><div class="line">	&#125;</div><div class="line">	<span class="built_in">cout</span> &lt;&lt; states[n][<span class="number">5</span>] &lt;&lt; <span class="built_in">endl</span>;</div><div class="line">	<span class="keyword">return</span> <span class="number">0</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h2 id="C-实现"><a href="#C-实现" class="headerlink" title="C++实现"></a>C++实现</h2><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="keyword">long</span> <span class="keyword">long</span> mod = <span class="number">1000000007</span>;</span><br><span class="line">	<span class="keyword">int</span> n;</span><br><span class="line">	<span class="built_in">cin</span> &gt;&gt; n;</span><br><span class="line">	<span class="keyword">long</span> <span class="keyword">long</span>** states = <span class="keyword">new</span> <span class="keyword">long</span> <span class="keyword">long</span>*[n+<span class="number">1</span>];</span><br><span class="line">	<span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt;= n; i++)</span><br><span class="line">		states[i] = <span class="keyword">new</span> <span class="keyword">long</span> <span class="keyword">long</span>[<span class="number">6</span>];</span><br><span class="line">	<span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; <span class="number">6</span>; i++)</span><br><span class="line">		states[<span class="number">0</span>][i] = <span class="number">0</span>;</span><br><span class="line">	<span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt;= n; i++)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="keyword">int</span> j = i - <span class="number">1</span>;</span><br><span class="line">		states[i][<span class="number">0</span>] = <span class="number">1</span>;</span><br><span class="line">		states[i][<span class="number">1</span>] = (states[j][<span class="number">0</span>] + states[j][<span class="number">1</span>] * <span class="number">2</span>) % mod;</span><br><span class="line">		states[i][<span class="number">2</span>] = (states[j][<span class="number">0</span>] + states[j][<span class="number">2</span>]) % mod;</span><br><span class="line">		states[i][<span class="number">3</span>] = (states[j][<span class="number">1</span>] + states[j][<span class="number">3</span>] * <span class="number">2</span>) % mod;</span><br><span class="line">		states[i][<span class="number">4</span>] = (states[j][<span class="number">1</span>] + states[j][<span class="number">2</span>] + states[j][<span class="number">4</span>] * <span class="number">2</span>) % mod;</span><br><span class="line">		states[i][<span class="number">5</span>] = (states[j][<span class="number">3</span>] + states[j][<span class="number">4</span>] + states[j][<span class="number">5</span>] * <span class="number">2</span>) % mod;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="built_in">cout</span> &lt;&lt; states[n][<span class="number">5</span>] &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
       
     </div>
@@ -613,7 +592,7 @@
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">4</span>
+              <span class="site-state-item-count">5</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
@@ -630,7 +609,7 @@
           
             <div class="site-state-item site-state-tags">
               <a href="/tags">
-                <span class="site-state-item-count">10</span>
+                <span class="site-state-item-count">11</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>
@@ -697,7 +676,7 @@
               
             
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#题目"><span class="nav-number">1.</span> <span class="nav-text">题目</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#问题描述"><span class="nav-number">1.1.</span> <span class="nav-text">问题描述</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#输入格式"><span class="nav-number">1.2.</span> <span class="nav-text">输入格式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#输出格式"><span class="nav-number">1.3.</span> <span class="nav-text">输出格式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#样例输入"><span class="nav-number">1.4.</span> <span class="nav-text">样例输入</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#样例输出"><span class="nav-number">1.5.</span> <span class="nav-text">样例输出</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#思路"><span class="nav-number">2.</span> <span class="nav-text">思路</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#C-实现"><span class="nav-number">3.</span> <span class="nav-text">C++实现</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#题目"><span class="nav-number">1.</span> <span class="nav-text"><a href="#&#x9898;&#x76EE;" class="headerlink" title="&#x9898;&#x76EE;"></a>&#x9898;&#x76EE;</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#问题描述"><span class="nav-number">1.1.</span> <span class="nav-text"><a href="#&#x95EE;&#x9898;&#x63CF;&#x8FF0;" class="headerlink" title="&#x95EE;&#x9898;&#x63CF;&#x8FF0;"></a>&#x95EE;&#x9898;&#x63CF;&#x8FF0;</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#输入格式"><span class="nav-number">1.2.</span> <span class="nav-text"><a href="#&#x8F93;&#x5165;&#x683C;&#x5F0F;" class="headerlink" title="&#x8F93;&#x5165;&#x683C;&#x5F0F;"></a>&#x8F93;&#x5165;&#x683C;&#x5F0F;</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#输出格式"><span class="nav-number">1.3.</span> <span class="nav-text"><a href="#&#x8F93;&#x51FA;&#x683C;&#x5F0F;" class="headerlink" title="&#x8F93;&#x51FA;&#x683C;&#x5F0F;"></a>&#x8F93;&#x51FA;&#x683C;&#x5F0F;</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#样例输入"><span class="nav-number">1.4.</span> <span class="nav-text"><a href="#&#x6837;&#x4F8B;&#x8F93;&#x5165;" class="headerlink" title="&#x6837;&#x4F8B;&#x8F93;&#x5165;"></a>&#x6837;&#x4F8B;&#x8F93;&#x5165;</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#样例输出"><span class="nav-number">1.5.</span> <span class="nav-text"><a href="#&#x6837;&#x4F8B;&#x8F93;&#x51FA;" class="headerlink" title="&#x6837;&#x4F8B;&#x8F93;&#x51FA;"></a>&#x6837;&#x4F8B;&#x8F93;&#x51FA;</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#思路"><span class="nav-number">2.</span> <span class="nav-text"><a href="#&#x601D;&#x8DEF;" class="headerlink" title="&#x601D;&#x8DEF;"></a>&#x601D;&#x8DEF;</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#C-实现"><span class="nav-number">3.</span> <span class="nav-text"><a href="#C-&#x5B9E;&#x73B0;" class="headerlink" title="C++&#x5B9E;&#x73B0;"></a>C++&#x5B9E;&#x73B0;</span></a></li></ol></div>
             
           </div>
         </section>
@@ -716,7 +695,7 @@
         <div class="copyright" >
   
   &copy; 
-  <span itemprop="copyrightYear">2016</span>
+  <span itemprop="copyrightYear">2017</span>
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>
@@ -955,24 +934,7 @@
         showTime(Counter);
       }
     });
-  </script><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
-<script type="text/x-mathjax-config">
-  MathJax.Hub.Config("");
-</script>
-
-<script type="text/x-mathjax-config">
-  MathJax.Hub.Queue(function() {
-    var all = MathJax.Hub.getAllJax(), i;
-    for(i=0; i < all.length; i += 1) {
-      all[i].SourceElement().parentNode.className += ' has-jax';
-    }
-  });
-</script>
-
-<script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
-</script>
-<!-- End: Injected MathJax -->
-<!-- hexo-inject:end -->
+  </script>
 
 
 
