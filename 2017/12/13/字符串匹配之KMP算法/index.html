@@ -68,7 +68,7 @@
 <link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="C++,动态规划,CCF," />
+  <meta name="keywords" content="字符串,C++,hiho," />
 
 
 
@@ -84,24 +84,20 @@
 
 
 
-<meta name="description" content="题目问题描述 我们把一个数称为有趣的，当且仅当：  它的数字只包含0, 1, 2, 3，且这四个数字都出现过至少一次。 所有的0都出现在所有的1之前，而所有的2都出现在所有的3之前。 最高位数字不为0。  因此，符合我们定义的最小的有趣的数是2013。除此以外，4位的有趣的数还有两个：2031和2301。请计算恰好有n位的有趣的数的个数。由于答案可能非常大，只需要输出答案除以1000000007的">
-<meta name="keywords" content="C++,动态规划,CCF">
+<meta name="description" content="KMP 算法思路关于字符串匹配，常规的思路是用原串中长度等于模式串的子串和模式串比较，如果二者相等那么就成功找到了一个匹配。假设原串长度为 $m$ ， 模式串长度为 $n$，那么我们需要做 $O(m)$ 次字符串比较，每次比较又需要做 $O(n)$ 次字符的比较，这样一来时间复杂度就为 $O(mn)$，并非一个理想的方法。如果使用KMP算法，可以减少匹配中大量重复的匹配，将复杂度缩小到 $O(m">
+<meta name="keywords" content="字符串,C++,hiho">
 <meta property="og:type" content="article">
-<meta property="og:title" content="CCF试题——有趣的数">
-<meta property="og:url" content="http://yaochg.com/2016/09/06/CCF试题——有趣的数/index.html">
+<meta property="og:title" content="字符串匹配之KMP算法">
+<meta property="og:url" content="http://yaochg.com/2017/12/13/字符串匹配之KMP算法/index.html">
 <meta property="og:site_name" content="YaoC&#39;s Blog">
-<meta property="og:description" content="题目问题描述 我们把一个数称为有趣的，当且仅当：  它的数字只包含0, 1, 2, 3，且这四个数字都出现过至少一次。 所有的0都出现在所有的1之前，而所有的2都出现在所有的3之前。 最高位数字不为0。  因此，符合我们定义的最小的有趣的数是2013。除此以外，4位的有趣的数还有两个：2031和2301。请计算恰好有n位的有趣的数的个数。由于答案可能非常大，只需要输出答案除以1000000007的">
+<meta property="og:description" content="KMP 算法思路关于字符串匹配，常规的思路是用原串中长度等于模式串的子串和模式串比较，如果二者相等那么就成功找到了一个匹配。假设原串长度为 $m$ ， 模式串长度为 $n$，那么我们需要做 $O(m)$ 次字符串比较，每次比较又需要做 $O(n)$ 次字符的比较，这样一来时间复杂度就为 $O(mn)$，并非一个理想的方法。如果使用KMP算法，可以减少匹配中大量重复的匹配，将复杂度缩小到 $O(m">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="http://o9w932hp8.bkt.clouddn.com/%E6%9C%89%E8%B6%A3%E7%9A%84%E6%95%B0.png">
-<meta property="og:image" content="http://o9w932hp8.bkt.clouddn.com/%E6%9C%89%E8%B6%A3%E7%9A%84%E6%95%B0%20%282%29.png">
-<meta property="og:image" content="http://o9w932hp8.bkt.clouddn.com/%E6%9C%89%E8%B6%A3%E7%9A%84%E6%95%B0%20%283%29.png">
-<meta property="og:image" content="http://o9w932hp8.bkt.clouddn.com/%E6%9C%89%E8%B6%A3%E7%9A%84%E6%95%B0%20%284%29.png">
-<meta property="og:image" content="http://o9w932hp8.bkt.clouddn.com/%E6%9C%89%E8%B6%A3%E7%9A%84%E6%95%B0%20%285%29.png">
-<meta property="og:updated_time" content="2016-09-06T06:35:58.000Z">
+<meta property="og:image" content="http://o9w932hp8.bkt.clouddn.com/362D092BD091DFDA6EEB1254ABCA9A4A.jpg">
+<meta property="og:updated_time" content="2017-12-13T13:03:37.764Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="CCF试题——有趣的数">
-<meta name="twitter:description" content="题目问题描述 我们把一个数称为有趣的，当且仅当：  它的数字只包含0, 1, 2, 3，且这四个数字都出现过至少一次。 所有的0都出现在所有的1之前，而所有的2都出现在所有的3之前。 最高位数字不为0。  因此，符合我们定义的最小的有趣的数是2013。除此以外，4位的有趣的数还有两个：2031和2301。请计算恰好有n位的有趣的数的个数。由于答案可能非常大，只需要输出答案除以1000000007的">
-<meta name="twitter:image" content="http://o9w932hp8.bkt.clouddn.com/%E6%9C%89%E8%B6%A3%E7%9A%84%E6%95%B0.png">
+<meta name="twitter:title" content="字符串匹配之KMP算法">
+<meta name="twitter:description" content="KMP 算法思路关于字符串匹配，常规的思路是用原串中长度等于模式串的子串和模式串比较，如果二者相等那么就成功找到了一个匹配。假设原串长度为 $m$ ， 模式串长度为 $n$，那么我们需要做 $O(m)$ 次字符串比较，每次比较又需要做 $O(n)$ 次字符的比较，这样一来时间复杂度就为 $O(mn)$，并非一个理想的方法。如果使用KMP算法，可以减少匹配中大量重复的匹配，将复杂度缩小到 $O(m">
+<meta name="twitter:image" content="http://o9w932hp8.bkt.clouddn.com/362D092BD091DFDA6EEB1254ABCA9A4A.jpg">
 
 
 
@@ -122,9 +118,9 @@
 
 
 
-  <link rel="canonical" href="http://yaochg.com/2016/09/06/CCF试题——有趣的数/"/>
+  <link rel="canonical" href="http://yaochg.com/2017/12/13/字符串匹配之KMP算法/"/>
 
-  <title> CCF试题——有趣的数 | YaoC's Blog </title>
+  <title> 字符串匹配之KMP算法 | YaoC's Blog </title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
@@ -254,7 +250,7 @@
             
             
               
-                CCF试题——有趣的数
+                字符串匹配之KMP算法
               
             
           </h1>
@@ -266,8 +262,8 @@
               <i class="fa fa-calendar-o"></i>
             </span>
             <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2016-09-06T14:05:03+08:00" content="2016-09-06">
-              2016-09-06
+            <time itemprop="dateCreated" datetime="2017-12-13T20:46:09+08:00" content="2017-12-13">
+              2017-12-13
             </time>
           </span>
 
@@ -300,7 +296,7 @@
 
           
           
-             <span id="/2016/09/06/CCF试题——有趣的数/" class="leancloud_visitors" data-flag-title="CCF试题——有趣的数">
+             <span id="/2017/12/13/字符串匹配之KMP算法/" class="leancloud_visitors" data-flag-title="字符串匹配之KMP算法">
                &nbsp; | &nbsp;
                <span class="post-meta-item-icon">
                  <i class="fa fa-eye"></i>
@@ -322,106 +318,194 @@
       
 
       
-        <h2 id="题目"><a href="#题目" class="headerlink" title="题目"></a>题目</h2><h3 id="问题描述"><a href="#问题描述" class="headerlink" title="问题描述"></a>问题描述</h3><blockquote>
-<p>我们把一个数称为有趣的，当且仅当：</p>
-<ol>
-<li>它的数字只包含0, 1, 2, 3，且这四个数字都出现过至少一次。</li>
-<li>所有的0都出现在所有的1之前，而所有的2都出现在所有的3之前。</li>
-<li>最高位数字不为0。</li>
-</ol>
-<p>因此，符合我们定义的最小的有趣的数是<strong>2013</strong>。除此以外，4位的有趣的数还有两个：<strong>2031</strong>和<strong>2301</strong>。<br>请计算恰好有n位的有趣的数的个数。由于答案可能非常大，只需要输出答案除以<strong>1000000007</strong>的余数。</p>
-</blockquote>
-<h3 id="输入格式"><a href="#输入格式" class="headerlink" title="输入格式"></a>输入格式</h3><blockquote>
-<p>输入只有一行，包括恰好一个正整数n (4 ≤ n ≤ 1000)。</p>
-</blockquote>
-<h3 id="输出格式"><a href="#输出格式" class="headerlink" title="输出格式"></a>输出格式</h3><blockquote>
-<p>输出只有一行，包括恰好n 位的整数中有趣的数的个数除以1000000007的余数。</p>
-</blockquote>
-<h3 id="样例输入"><a href="#样例输入" class="headerlink" title="样例输入"></a>样例输入</h3><blockquote>
-<p>4</p>
-</blockquote>
-<h3 id="样例输出"><a href="#样例输出" class="headerlink" title="样例输出"></a>样例输出</h3><blockquote>
-<p>3</p>
-</blockquote>
-<h2 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h2><p>根据题目中<code>0在1之前</code>、<code>2在3之前</code>以及<code>最高位不为0</code>我们可以推出<code>2</code>一定会出现在首位。考虑<strong>一个有趣的数的前k位</strong>只使用了部分数的情况，我们可以发现状态集中一共有6种情况：</p>
+        <h2 id="KMP-算法思路"><a href="#KMP-算法思路" class="headerlink" title="KMP 算法思路"></a>KMP 算法思路</h2><p>关于字符串匹配，常规的思路是用原串中长度等于模式串的子串和模式串比较，如果二者相等那么就成功找到了一个匹配。假设原串长度为 $m$ ， 模式串长度为 $n$，那么我们需要做 $O(m)$ 次字符串比较，每次比较又需要做 $O(n)$ 次字符的比较，这样一来时间复杂度就为 $O(mn)$，并非一个理想的方法。<br>如果使用KMP算法，可以减少匹配中大量重复的匹配，将复杂度缩小到 $O(m + n)$。<br>KMP 的思路是：当遇到两个字符不匹配时（ $origin[p+1]$ 和 $pattern[q+1]$ ），在模式串中，我们从这个不匹配当位置往前看，找到一个最长的子串 $S_1$，这个子串必须满足 <strong>从模式串的起始位置开始也有一个一摸一样的子串 $S_0$</strong>，这样我们就能够把模式串整体右移，用 $S_0$ 去对齐上次匹配时原串中与 $S_1$对齐的位置。<br><img src="http://o9w932hp8.bkt.clouddn.com/362D092BD091DFDA6EEB1254ABCA9A4A.jpg" alt="IMAGE"><br>这样我们可以直接令 $q = next(q)$ , 然后继续匹配 $origin[p+1]$ 和 $pattern[q+1]$，从而省去了常规思路中的回退和不必要的匹配。</p>
+<h2 id="next-数组"><a href="#next-数组" class="headerlink" title="next 数组"></a>next 数组</h2><p>容易看出，我们要使用 KMP 算法时，需要预先计算出模式串中每个位置 $q$ 的 $next(q)$ , 得到一个$next$ 数组，然后每次不匹配时就去查这个数组，找到对应的值。根据上图可以看出：我们分别从 $pattern[0]$ 向后和从 $pattern[q]$向前去找最长的相同的字符串 $S_0$ 和 $S_1$ ， $S_0$ 的最后一位就是 $next(q)$ 。但是这样的话时间复杂度就正比与 $q$，而求解整个 $next$ 数组的时间复杂度就是 $O(n^2)$ , 显然不是一个满意的结果。但是如果你用该方法去求解一个模式串的 $next$ 数组后你就会发现起始 $next(q)$ 和 $next(q-1)$ 是相关的。如果  $pattern[q] = pattern[next(q-1)+1]$ ,那么 $next(q) = next(q-1)+1 $ ,并且这种关系是可以一直递推下去的，这样我们就能近似在 $O(n)$ 的时间复杂度内求出 $next$ 数组。<br>接下来我们以模式 <code>bababb</code> 为例求解它的 $next$ 数组：<br>1.$\quad$首先将 $next(0)$ 置为 -1</p>
 <table>
 <thead>
 <tr>
-<th style="text-align:center">状态</th>
-<th style="text-align:center">使用的数字</th>
-<th style="text-align:center">未使用的数字</th>
+<th>0</th>
+<th>1</th>
+<th>2</th>
+<th>3</th>
+<th>4</th>
+<th>5</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td style="text-align:center">0</td>
-<td style="text-align:center">2</td>
-<td style="text-align:center">0 1 3</td>
+<td>b</td>
+<td>a</td>
+<td>b</td>
+<td>a</td>
+<td>b</td>
+<td>b</td>
 </tr>
 <tr>
-<td style="text-align:center">1</td>
-<td style="text-align:center">2 0</td>
-<td style="text-align:center">1 3</td>
-</tr>
-<tr>
-<td style="text-align:center">2</td>
-<td style="text-align:center">2 3</td>
-<td style="text-align:center">0 1</td>
-</tr>
-<tr>
-<td style="text-align:center">3</td>
-<td style="text-align:center">2 0 1</td>
-<td style="text-align:center">3</td>
-</tr>
-<tr>
-<td style="text-align:center">4</td>
-<td style="text-align:center">2 3 0</td>
-<td style="text-align:center">1</td>
-</tr>
-<tr>
-<td style="text-align:center"><strong>5</strong></td>
-<td style="text-align:center"><strong>2 0 1 3</strong></td>
-<td style="text-align:center"><strong>无</strong></td>
+<td>-1</td>
+<td>?</td>
+<td>?</td>
+<td>?</td>
+<td>?</td>
+<td>?</td>
 </tr>
 </tbody>
 </table>
-<blockquote>
-<p><strong>注意</strong><br>只有以上6种情况满足题目约束，以<code>使用数字2、1 未使用数字3、0</code>为例，前<code>k</code>位中有<code>1</code>，后<code>n-k</code>位中一定会存在<code>0</code>与题目约束<code>0在1之前</code>不符，故排除。其它情况皆如此。</p>
-</blockquote>
-<p>容易看出，在前<code>k</code>位使用部分数字的条件下的不同排列可以由在前<code>k-1</code>位使用部分数字的条件下的排列添加<code>1</code>个数字得到。以<code>state[k][i]</code>表示某个有趣的数的<code>前k位是第i种状态</code>的不同排列的数量，我们可以得到：</p>
-<ul>
-<li><p>$state[k][0] = 1  $</p>
-<blockquote>
-<p>显然前k位只用2的情况只有1种</p>
-</blockquote>
-</li>
-<li><p>$state[k][1] = state[k-1][0] + state[k-1][1]*2$<br><img src="http://o9w932hp8.bkt.clouddn.com/%E6%9C%89%E8%B6%A3%E7%9A%84%E6%95%B0.png" alt="有趣的数1"></p>
-<blockquote>
-<p>前k位只有2和0的状态可由前k-1位只由2的状态加一个0得到，也可以由前k-1位已经包含了2和0的状态再加上一个2<strong>或</strong>0得到。</p>
-</blockquote>
-</li>
-<li><p>$state[k][2]=state[k-1][0]+state[k-1][2]$<br><img src="http://o9w932hp8.bkt.clouddn.com/%E6%9C%89%E8%B6%A3%E7%9A%84%E6%95%B0%20%282%29.png" alt="有趣的数2"></p>
-<blockquote>
-<p>前k位只有2和3的状态可由前k-1位只由2的状态加一个3得到，也可以由前k-1位已经包含了2和3的状态再加上一个3得到。这里因为2不能在3的后面故比上一个状态少了一种情况。</p>
-</blockquote>
-</li>
-<li><p>$state[k][3]=state[k-1][1]+state[k-1][3]*2$<br><img src="http://o9w932hp8.bkt.clouddn.com/%E6%9C%89%E8%B6%A3%E7%9A%84%E6%95%B0%20%283%29.png" alt="有趣的数3"></p>
-<blockquote>
-<p>前k位只有2、0和1的状态可由前k-1位只由2和0的状态加一个1得到，也可以由前k-1位已经包含了2、0和1的状态再加上一个2<strong>或</strong>1得到。</p>
-</blockquote>
-</li>
-<li><p>$state[k][4]=state[k-1][1]+state[k-1][2]+state[k-1][4]*2$<br><img src="http://o9w932hp8.bkt.clouddn.com/%E6%9C%89%E8%B6%A3%E7%9A%84%E6%95%B0%20%284%29.png" alt="有趣的数4"></p>
-<blockquote>
-<p>前k位只有2、3和0的状态可由前k-1位只由2和0的状态加一个3得到，也可由前k-1位只由2和3的状态加一个0得到，亦可由前k-1位已经包含了2、3和0的状态再加上一个3<strong>或</strong>0得到。</p>
-</blockquote>
-</li>
-<li><p>$state[k][5]=state[k-1][3]+state[k-1][4]+state[k-1][5]*2$<br><img src="http://o9w932hp8.bkt.clouddn.com/%E6%9C%89%E8%B6%A3%E7%9A%84%E6%95%B0%20%285%29.png" alt="有趣的数5"></p>
-<blockquote>
-<p>前k位包含了2、3、0、1的状态（<strong>最终态</strong>）可由前k-1位只由2、3和0的状态加一个1得到，也可由前k-1位只由2、0和1的状态加一个3得到，亦可由前k-1位已经包含了2、3、0、1的状态再加上一个1<strong>或</strong>3得到。<br>最终输出的答案：$state[n][5]$</p>
-</blockquote>
-</li>
-</ul>
-<h2 id="C-实现"><a href="#C-实现" class="headerlink" title="C++实现"></a>C++实现</h2><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="keyword">long</span> <span class="keyword">long</span> mod = <span class="number">1000000007</span>;</span><br><span class="line">	<span class="keyword">int</span> n;</span><br><span class="line">	<span class="built_in">cin</span> &gt;&gt; n;</span><br><span class="line">	<span class="keyword">long</span> <span class="keyword">long</span>** states = <span class="keyword">new</span> <span class="keyword">long</span> <span class="keyword">long</span>*[n+<span class="number">1</span>];</span><br><span class="line">	<span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt;= n; i++)</span><br><span class="line">		states[i] = <span class="keyword">new</span> <span class="keyword">long</span> <span class="keyword">long</span>[<span class="number">6</span>];</span><br><span class="line">	<span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; <span class="number">6</span>; i++)</span><br><span class="line">		states[<span class="number">0</span>][i] = <span class="number">0</span>;</span><br><span class="line">	<span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt;= n; i++)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="keyword">int</span> j = i - <span class="number">1</span>;</span><br><span class="line">		states[i][<span class="number">0</span>] = <span class="number">1</span>;</span><br><span class="line">		states[i][<span class="number">1</span>] = (states[j][<span class="number">0</span>] + states[j][<span class="number">1</span>] * <span class="number">2</span>) % mod;</span><br><span class="line">		states[i][<span class="number">2</span>] = (states[j][<span class="number">0</span>] + states[j][<span class="number">2</span>]) % mod;</span><br><span class="line">		states[i][<span class="number">3</span>] = (states[j][<span class="number">1</span>] + states[j][<span class="number">3</span>] * <span class="number">2</span>) % mod;</span><br><span class="line">		states[i][<span class="number">4</span>] = (states[j][<span class="number">1</span>] + states[j][<span class="number">2</span>] + states[j][<span class="number">4</span>] * <span class="number">2</span>) % mod;</span><br><span class="line">		states[i][<span class="number">5</span>] = (states[j][<span class="number">3</span>] + states[j][<span class="number">4</span>] + states[j][<span class="number">5</span>] * <span class="number">2</span>) % mod;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="built_in">cout</span> &lt;&lt; states[n][<span class="number">5</span>] &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>2.$\quad pattern[1] = a \ne pattern[next(1-1) + 1] = b$ ，这里  $ next(1-1) = -1$ 而 $next(-1)$ 不存在所以无法继续递推，故 $next(1) = -1$</p>
+<table>
+<thead>
+<tr>
+<th>0</th>
+<th>1</th>
+<th>2</th>
+<th>3</th>
+<th>4</th>
+<th>5</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>b</td>
+<td>a</td>
+<td>b</td>
+<td>a</td>
+<td>b</td>
+<td>b</td>
+</tr>
+<tr>
+<td>-1</td>
+<td>-1</td>
+<td>?</td>
+<td>?</td>
+<td>?</td>
+<td>?</td>
+</tr>
+</tbody>
+</table>
+<p>3.$\quad (pattern[2] = b) = (pattern[next(2-1) + 1] = pattern[0] = b)$  故 $next(2) = 0$</p>
+<table>
+<thead>
+<tr>
+<th>0</th>
+<th>1</th>
+<th>2</th>
+<th>3</th>
+<th>4</th>
+<th>5</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>b</td>
+<td>a</td>
+<td>b</td>
+<td>a</td>
+<td>b</td>
+<td>b</td>
+</tr>
+<tr>
+<td>-1</td>
+<td>-1</td>
+<td>0</td>
+<td>?</td>
+<td>?</td>
+<td>?</td>
+</tr>
+</tbody>
+</table>
+<p>4.$\quad (pattern[3] = a) = (pattern[next(3-1) + 1] = pattern[1] = a)$  故 $next(3) = 1$</p>
+<table>
+<thead>
+<tr>
+<th>0</th>
+<th>1</th>
+<th>2</th>
+<th>3</th>
+<th>4</th>
+<th>5</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>b</td>
+<td>a</td>
+<td>b</td>
+<td>a</td>
+<td>b</td>
+<td>b</td>
+</tr>
+<tr>
+<td>-1</td>
+<td>-1</td>
+<td>0</td>
+<td>1</td>
+<td>?</td>
+<td>?</td>
+</tr>
+</tbody>
+</table>
+<p>5.$\quad(pattern[4] = b) = (pattern[next(4-1) + 1] = pattern[2] = b)$  故 $next(3) = 2$</p>
+<table>
+<thead>
+<tr>
+<th>0</th>
+<th>1</th>
+<th>2</th>
+<th>3</th>
+<th>4</th>
+<th>5</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>b</td>
+<td>a</td>
+<td>b</td>
+<td>a</td>
+<td>b</td>
+<td>b</td>
+</tr>
+<tr>
+<td>-1</td>
+<td>-1</td>
+<td>0</td>
+<td>1</td>
+<td>2</td>
+<td>?</td>
+</tr>
+</tbody>
+</table>
+<p>6.$\quad (pattern[5] = b) \ne (pattern[next(5-1) + 1] = pattern[3] = a)$<br>接着 $pattern[next(next(5-1)) + 1] = a$ 也不等于 $pattern[5]$ 这样一直到 $ next(-1)$ 也没找到相等的字符，但注意到 $pattern[0] = b = pattern[5]$ , 所以 $next(5) = 0$ (和 $next(1)$ 不一样 )</p>
+<table>
+<thead>
+<tr>
+<th>0</th>
+<th>1</th>
+<th>2</th>
+<th>3</th>
+<th>4</th>
+<th>5</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>b</td>
+<td>a</td>
+<td>b</td>
+<td>a</td>
+<td>b</td>
+<td>b</td>
+</tr>
+<tr>
+<td>-1</td>
+<td>-1</td>
+<td>0</td>
+<td>1</td>
+<td>2</td>
+<td>0</td>
+</tr>
+</tbody>
+</table>
+<h2 id="代码示例"><a href="#代码示例" class="headerlink" title="代码示例"></a>代码示例</h2><p>针对 <a href="https://hihocoder.com/problemset/problem/1015" target="_blank" rel="noopener">hihoCoder</a> 上但KMP算法题给解答<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;vector&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 求 next 数组</span></span><br><span class="line"><span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; getNext(<span class="built_in">string</span> p) &#123;</span><br><span class="line">    <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; next = &#123;<span class="number">-1</span>&#125;;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt; p.length(); ++i) &#123;</span><br><span class="line">        <span class="keyword">int</span> j = next[i - <span class="number">1</span>];</span><br><span class="line">        <span class="keyword">while</span> (j &gt;= <span class="number">0</span>) &#123;</span><br><span class="line">            <span class="keyword">if</span> (p[j + <span class="number">1</span>] == p[i]) &#123;</span><br><span class="line">                next.push_back(j + <span class="number">1</span>);</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            j = next[j];</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span> (j &lt; <span class="number">0</span>) next.push_back(p[i] == p[<span class="number">0</span>] ? <span class="number">0</span> : <span class="number">-1</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> next;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">kmp</span><span class="params">(<span class="built_in">string</span> p, <span class="built_in">string</span> s)</span> </span>&#123;</span><br><span class="line">    <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; next = getNext(p);</span><br><span class="line">    <span class="keyword">int</span> match = <span class="number">0</span>;</span><br><span class="line">    int i(-1), j(-1), l(s.length()-1);</span><br><span class="line">    <span class="keyword">while</span> (i &lt; l) &#123;</span><br><span class="line">        <span class="keyword">if</span> (s[i+<span class="number">1</span>] == p[j+<span class="number">1</span>]) &#123; <span class="comment">// 字符匹配成功</span></span><br><span class="line">            i++;</span><br><span class="line">            j++;</span><br><span class="line">            <span class="keyword">if</span> (j == p.length()<span class="number">-1</span>) &#123;</span><br><span class="line">                match++;</span><br><span class="line">                j = next[j];</span><br><span class="line">            &#125;</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="keyword">if</span> (j == <span class="number">-1</span>) i++; <span class="comment">// 无法匹配当前字符 i，i 向后移</span></span><br><span class="line">            <span class="keyword">else</span> j = next[j];</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> match;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">    <span class="comment">// freopen("input.txt", "r", stdin);</span></span><br><span class="line">    <span class="keyword">int</span> N;</span><br><span class="line">    <span class="built_in">cin</span>&gt;&gt;N;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; N; ++i) &#123;</span><br><span class="line">        <span class="built_in">string</span> p, s;</span><br><span class="line">        <span class="built_in">cin</span> &gt;&gt; p &gt;&gt; s;</span><br><span class="line">        <span class="built_in">cout</span> &lt;&lt; kmp(p, s) &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
 
       
     </div>
@@ -464,11 +548,11 @@
       
         <div class="post-tags">
           
+            <a href="/tags/字符串/" rel="tag">#字符串</a>
+          
             <a href="/tags/C/" rel="tag">#C++</a>
           
-            <a href="/tags/动态规划/" rel="tag">#动态规划</a>
-          
-            <a href="/tags/CCF/" rel="tag">#CCF</a>
+            <a href="/tags/hiho/" rel="tag">#hiho</a>
           
         </div>
       
@@ -477,17 +561,13 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2016/07/06/hexo博客搭建-基础部分/" rel="next" title="hexo博客搭建 --- 基础部分">
-                <i class="fa fa-chevron-left"></i> hexo博客搭建 --- 基础部分
+              <a href="/2017/12/06/Hadoop-二次排序/" rel="next" title="Hadoop 二次排序">
+                <i class="fa fa-chevron-left"></i> Hadoop 二次排序
               </a>
             
           </div>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2016/10/07/使用hadoop命令运行程序（hadoop-2-7-3）/" rel="prev" title="使用hadoop命令运行程序（hadoop 2.7.3）">
-                使用hadoop命令运行程序（hadoop 2.7.3） <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -662,7 +742,7 @@
               
             
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#题目"><span class="nav-number">1.</span> <span class="nav-text"><a href="#&#x9898;&#x76EE;" class="headerlink" title="&#x9898;&#x76EE;"></a>&#x9898;&#x76EE;</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#问题描述"><span class="nav-number">1.1.</span> <span class="nav-text"><a href="#&#x95EE;&#x9898;&#x63CF;&#x8FF0;" class="headerlink" title="&#x95EE;&#x9898;&#x63CF;&#x8FF0;"></a>&#x95EE;&#x9898;&#x63CF;&#x8FF0;</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#输入格式"><span class="nav-number">1.2.</span> <span class="nav-text"><a href="#&#x8F93;&#x5165;&#x683C;&#x5F0F;" class="headerlink" title="&#x8F93;&#x5165;&#x683C;&#x5F0F;"></a>&#x8F93;&#x5165;&#x683C;&#x5F0F;</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#输出格式"><span class="nav-number">1.3.</span> <span class="nav-text"><a href="#&#x8F93;&#x51FA;&#x683C;&#x5F0F;" class="headerlink" title="&#x8F93;&#x51FA;&#x683C;&#x5F0F;"></a>&#x8F93;&#x51FA;&#x683C;&#x5F0F;</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#样例输入"><span class="nav-number">1.4.</span> <span class="nav-text"><a href="#&#x6837;&#x4F8B;&#x8F93;&#x5165;" class="headerlink" title="&#x6837;&#x4F8B;&#x8F93;&#x5165;"></a>&#x6837;&#x4F8B;&#x8F93;&#x5165;</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#样例输出"><span class="nav-number">1.5.</span> <span class="nav-text"><a href="#&#x6837;&#x4F8B;&#x8F93;&#x51FA;" class="headerlink" title="&#x6837;&#x4F8B;&#x8F93;&#x51FA;"></a>&#x6837;&#x4F8B;&#x8F93;&#x51FA;</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#思路"><span class="nav-number">2.</span> <span class="nav-text"><a href="#&#x601D;&#x8DEF;" class="headerlink" title="&#x601D;&#x8DEF;"></a>&#x601D;&#x8DEF;</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#C-实现"><span class="nav-number">3.</span> <span class="nav-text"><a href="#C-&#x5B9E;&#x73B0;" class="headerlink" title="C++&#x5B9E;&#x73B0;"></a>C++&#x5B9E;&#x73B0;</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#KMP-算法思路"><span class="nav-number">1.</span> <span class="nav-text"><a href="#KMP-&#x7B97;&#x6CD5;&#x601D;&#x8DEF;" class="headerlink" title="KMP &#x7B97;&#x6CD5;&#x601D;&#x8DEF;"></a>KMP &#x7B97;&#x6CD5;&#x601D;&#x8DEF;</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#next-数组"><span class="nav-number">2.</span> <span class="nav-text"><a href="#next-&#x6570;&#x7EC4;" class="headerlink" title="next &#x6570;&#x7EC4;"></a>next &#x6570;&#x7EC4;</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#代码示例"><span class="nav-number">3.</span> <span class="nav-text"><a href="#&#x4EE3;&#x7801;&#x793A;&#x4F8B;" class="headerlink" title="&#x4EE3;&#x7801;&#x793A;&#x4F8B;"></a>&#x4EE3;&#x7801;&#x793A;&#x4F8B;</span></a></li></ol></div>
             
           </div>
         </section>
