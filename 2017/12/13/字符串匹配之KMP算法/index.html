@@ -7,7 +7,7 @@
 
 <html class="theme-next pisces use-motion">
 <head>
-  <meta charset="UTF-8"/>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
 
@@ -68,7 +68,7 @@
 <link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="字符串,C++,hiho," />
+  <meta name="keywords" content="C++,字符串,hiho," />
 
 
 
@@ -85,19 +85,19 @@
 
 
 <meta name="description" content="KMP 算法思路关于字符串匹配，常规的思路是用原串中长度等于模式串的子串和模式串比较，如果二者相等那么就成功找到了一个匹配。假设原串长度为 $m$ ， 模式串长度为 $n$，那么我们需要做 $O(m)$ 次字符串比较，每次比较又需要做 $O(n)$ 次字符的比较，这样一来时间复杂度就为 $O(mn)$，并非一个理想的方法。如果使用KMP算法，可以减少匹配中大量重复的匹配，将复杂度缩小到 $O(m">
-<meta name="keywords" content="字符串,C++,hiho">
+<meta name="keywords" content="C++,字符串,hiho">
 <meta property="og:type" content="article">
 <meta property="og:title" content="字符串匹配之KMP算法">
 <meta property="og:url" content="http://yaochg.com/2017/12/13/字符串匹配之KMP算法/index.html">
 <meta property="og:site_name" content="YaoC&#39;s Blog">
 <meta property="og:description" content="KMP 算法思路关于字符串匹配，常规的思路是用原串中长度等于模式串的子串和模式串比较，如果二者相等那么就成功找到了一个匹配。假设原串长度为 $m$ ， 模式串长度为 $n$，那么我们需要做 $O(m)$ 次字符串比较，每次比较又需要做 $O(n)$ 次字符的比较，这样一来时间复杂度就为 $O(mn)$，并非一个理想的方法。如果使用KMP算法，可以减少匹配中大量重复的匹配，将复杂度缩小到 $O(m">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="http://o9w932hp8.bkt.clouddn.com/362D092BD091DFDA6EEB1254ABCA9A4A.jpg">
-<meta property="og:updated_time" content="2017-12-13T13:03:37.764Z">
+<meta property="og:image" content="http://o9w932hp8.bkt.clouddn.com/617514492C260F2F6EE0F03C331D11DB.jpg">
+<meta property="og:updated_time" content="2017-12-14T03:31:54.388Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="字符串匹配之KMP算法">
 <meta name="twitter:description" content="KMP 算法思路关于字符串匹配，常规的思路是用原串中长度等于模式串的子串和模式串比较，如果二者相等那么就成功找到了一个匹配。假设原串长度为 $m$ ， 模式串长度为 $n$，那么我们需要做 $O(m)$ 次字符串比较，每次比较又需要做 $O(n)$ 次字符的比较，这样一来时间复杂度就为 $O(mn)$，并非一个理想的方法。如果使用KMP算法，可以减少匹配中大量重复的匹配，将复杂度缩小到 $O(m">
-<meta name="twitter:image" content="http://o9w932hp8.bkt.clouddn.com/362D092BD091DFDA6EEB1254ABCA9A4A.jpg">
+<meta name="twitter:image" content="http://o9w932hp8.bkt.clouddn.com/617514492C260F2F6EE0F03C331D11DB.jpg">
 
 
 
@@ -120,7 +120,7 @@
 
   <link rel="canonical" href="http://yaochg.com/2017/12/13/字符串匹配之KMP算法/"/>
 
-  <title> 字符串匹配之KMP算法 | YaoC's Blog </title>
+  <title> 字符串匹配之KMP算法 | YaoC's Blog </title><!-- hexo-inject:begin --><!-- hexo-inject:end -->
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
@@ -141,7 +141,7 @@
     
   
 
-  <div class="container one-collumn sidebar-position-left page-post-detail ">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container one-collumn sidebar-position-left page-post-detail ">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
@@ -318,7 +318,7 @@
       
 
       
-        <h2 id="KMP-算法思路"><a href="#KMP-算法思路" class="headerlink" title="KMP 算法思路"></a>KMP 算法思路</h2><p>关于字符串匹配，常规的思路是用原串中长度等于模式串的子串和模式串比较，如果二者相等那么就成功找到了一个匹配。假设原串长度为 $m$ ， 模式串长度为 $n$，那么我们需要做 $O(m)$ 次字符串比较，每次比较又需要做 $O(n)$ 次字符的比较，这样一来时间复杂度就为 $O(mn)$，并非一个理想的方法。<br>如果使用KMP算法，可以减少匹配中大量重复的匹配，将复杂度缩小到 $O(m + n)$。<br>KMP 的思路是：当遇到两个字符不匹配时（ $origin[p+1]$ 和 $pattern[q+1]$ ），在模式串中，我们从这个不匹配当位置往前看，找到一个最长的子串 $S_1$，这个子串必须满足 <strong>从模式串的起始位置开始也有一个一摸一样的子串 $S_0$</strong>，这样我们就能够把模式串整体右移，用 $S_0$ 去对齐上次匹配时原串中与 $S_1$对齐的位置。<br><img src="http://o9w932hp8.bkt.clouddn.com/362D092BD091DFDA6EEB1254ABCA9A4A.jpg" alt="IMAGE"><br>这样我们可以直接令 $q = next(q)$ , 然后继续匹配 $origin[p+1]$ 和 $pattern[q+1]$，从而省去了常规思路中的回退和不必要的匹配。</p>
+        <h2 id="KMP-算法思路"><a href="#KMP-算法思路" class="headerlink" title="KMP 算法思路"></a>KMP 算法思路</h2><p>关于字符串匹配，常规的思路是用原串中长度等于模式串的子串和模式串比较，如果二者相等那么就成功找到了一个匹配。假设原串长度为 $m$ ， 模式串长度为 $n$，那么我们需要做 $O(m)$ 次字符串比较，每次比较又需要做 $O(n)$ 次字符的比较，这样一来时间复杂度就为 $O(mn)$，并非一个理想的方法。<br>如果使用KMP算法，可以减少匹配中大量重复的匹配，将复杂度缩小到 $O(m + n)$。<br>KMP 的思路是：当遇到两个字符不匹配时（ $origin[p+1]$ 和 $pattern[q+1]$ ），在模式串中，我们从这个不匹配当位置往前看，找到一个最长的子串 $S_1$，这个子串必须满足 <strong>从模式串的起始位置开始也有一个一摸一样的子串 $S_0$</strong>，这样我们就能够把模式串整体右移，用 $S_0$ 去对齐上次匹配时原串中与 $S_1$对齐的位置。<br><img src="http://o9w932hp8.bkt.clouddn.com/617514492C260F2F6EE0F03C331D11DB.jpg" alt="IMAGE"><br>这样我们可以直接令 $q = next(q)$ , 然后继续匹配 $origin[p+1]$ 和 $pattern[q+1]$，从而省去了常规思路中的回退和不必要的匹配。</p>
 <h2 id="next-数组"><a href="#next-数组" class="headerlink" title="next 数组"></a>next 数组</h2><p>容易看出，我们要使用 KMP 算法时，需要预先计算出模式串中每个位置 $q$ 的 $next(q)$ , 得到一个$next$ 数组，然后每次不匹配时就去查这个数组，找到对应的值。根据上图可以看出：我们分别从 $pattern[0]$ 向后和从 $pattern[q]$向前去找最长的相同的字符串 $S_0$ 和 $S_1$ ， $S_0$ 的最后一位就是 $next(q)$ 。但是这样的话时间复杂度就正比与 $q$，而求解整个 $next$ 数组的时间复杂度就是 $O(n^2)$ , 显然不是一个满意的结果。但是如果你用该方法去求解一个模式串的 $next$ 数组后你就会发现起始 $next(q)$ 和 $next(q-1)$ 是相关的。如果  $pattern[q] = pattern[next(q-1)+1]$ ,那么 $next(q) = next(q-1)+1 $ ,并且这种关系是可以一直递推下去的，这样我们就能近似在 $O(n)$ 的时间复杂度内求出 $next$ 数组。<br>接下来我们以模式 <code>bababb</code> 为例求解它的 $next$ 数组：<br>1.$\quad$首先将 $next(0)$ 置为 -1</p>
 <table>
 <thead>
@@ -505,7 +505,7 @@
 </tr>
 </tbody>
 </table>
-<h2 id="代码示例"><a href="#代码示例" class="headerlink" title="代码示例"></a>代码示例</h2><p>针对 <a href="https://hihocoder.com/problemset/problem/1015" target="_blank" rel="noopener">hihoCoder</a> 上但KMP算法题给解答<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;vector&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 求 next 数组</span></span><br><span class="line"><span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; getNext(<span class="built_in">string</span> p) &#123;</span><br><span class="line">    <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; next = &#123;<span class="number">-1</span>&#125;;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt; p.length(); ++i) &#123;</span><br><span class="line">        <span class="keyword">int</span> j = next[i - <span class="number">1</span>];</span><br><span class="line">        <span class="keyword">while</span> (j &gt;= <span class="number">0</span>) &#123;</span><br><span class="line">            <span class="keyword">if</span> (p[j + <span class="number">1</span>] == p[i]) &#123;</span><br><span class="line">                next.push_back(j + <span class="number">1</span>);</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            j = next[j];</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span> (j &lt; <span class="number">0</span>) next.push_back(p[i] == p[<span class="number">0</span>] ? <span class="number">0</span> : <span class="number">-1</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> next;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">kmp</span><span class="params">(<span class="built_in">string</span> p, <span class="built_in">string</span> s)</span> </span>&#123;</span><br><span class="line">    <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; next = getNext(p);</span><br><span class="line">    <span class="keyword">int</span> match = <span class="number">0</span>;</span><br><span class="line">    int i(-1), j(-1), l(s.length()-1);</span><br><span class="line">    <span class="keyword">while</span> (i &lt; l) &#123;</span><br><span class="line">        <span class="keyword">if</span> (s[i+<span class="number">1</span>] == p[j+<span class="number">1</span>]) &#123; <span class="comment">// 字符匹配成功</span></span><br><span class="line">            i++;</span><br><span class="line">            j++;</span><br><span class="line">            <span class="keyword">if</span> (j == p.length()<span class="number">-1</span>) &#123;</span><br><span class="line">                match++;</span><br><span class="line">                j = next[j];</span><br><span class="line">            &#125;</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="keyword">if</span> (j == <span class="number">-1</span>) i++; <span class="comment">// 无法匹配当前字符 i，i 向后移</span></span><br><span class="line">            <span class="keyword">else</span> j = next[j];</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> match;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">    <span class="comment">// freopen("input.txt", "r", stdin);</span></span><br><span class="line">    <span class="keyword">int</span> N;</span><br><span class="line">    <span class="built_in">cin</span>&gt;&gt;N;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; N; ++i) &#123;</span><br><span class="line">        <span class="built_in">string</span> p, s;</span><br><span class="line">        <span class="built_in">cin</span> &gt;&gt; p &gt;&gt; s;</span><br><span class="line">        <span class="built_in">cout</span> &lt;&lt; kmp(p, s) &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h2 id="代码示例"><a href="#代码示例" class="headerlink" title="代码示例"></a>代码示例</h2><p>针对 <a href="https://hihocoder.com/problemset/problem/1015" target="_blank" rel="noopener">hihoCoder</a> 上的KMP算法题给出解答<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;vector&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 求 next 数组</span></span><br><span class="line"><span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; getNext(<span class="built_in">string</span> p) &#123;</span><br><span class="line">    <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; next = &#123;<span class="number">-1</span>&#125;;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt; p.length(); ++i) &#123;</span><br><span class="line">        <span class="keyword">int</span> j = next[i - <span class="number">1</span>];</span><br><span class="line">        <span class="keyword">while</span> (j &gt;= <span class="number">0</span>) &#123;</span><br><span class="line">            <span class="keyword">if</span> (p[j + <span class="number">1</span>] == p[i]) &#123;</span><br><span class="line">                next.push_back(j + <span class="number">1</span>);</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            j = next[j];</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span> (j &lt; <span class="number">0</span>) next.push_back(p[i] == p[<span class="number">0</span>] ? <span class="number">0</span> : <span class="number">-1</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> next;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">kmp</span><span class="params">(<span class="built_in">string</span> p, <span class="built_in">string</span> s)</span> </span>&#123;</span><br><span class="line">    <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; next = getNext(p);</span><br><span class="line">    <span class="keyword">int</span> match = <span class="number">0</span>;</span><br><span class="line">    int i(-1), j(-1), l(s.length()-1);</span><br><span class="line">    <span class="keyword">while</span> (i &lt; l) &#123;</span><br><span class="line">        <span class="keyword">if</span> (s[i+<span class="number">1</span>] == p[j+<span class="number">1</span>]) &#123; <span class="comment">// 字符匹配成功</span></span><br><span class="line">            i++;</span><br><span class="line">            j++;</span><br><span class="line">            <span class="keyword">if</span> (j == p.length()<span class="number">-1</span>) &#123;</span><br><span class="line">                match++;</span><br><span class="line">                j = next[j];</span><br><span class="line">            &#125;</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="keyword">if</span> (j == <span class="number">-1</span>) i++; <span class="comment">// 无法匹配当前字符 i，i 向后移</span></span><br><span class="line">            <span class="keyword">else</span> j = next[j];</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> match;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">    <span class="comment">// freopen("input.txt", "r", stdin);</span></span><br><span class="line">    <span class="keyword">int</span> N;</span><br><span class="line">    <span class="built_in">cin</span>&gt;&gt;N;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; N; ++i) &#123;</span><br><span class="line">        <span class="built_in">string</span> p, s;</span><br><span class="line">        <span class="built_in">cin</span> &gt;&gt; p &gt;&gt; s;</span><br><span class="line">        <span class="built_in">cout</span> &lt;&lt; kmp(p, s) &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
 
       
     </div>
@@ -548,9 +548,9 @@
       
         <div class="post-tags">
           
-            <a href="/tags/字符串/" rel="tag">#字符串</a>
-          
             <a href="/tags/C/" rel="tag">#C++</a>
+          
+            <a href="/tags/字符串/" rel="tag">#字符串</a>
           
             <a href="/tags/hiho/" rel="tag">#hiho</a>
           
@@ -999,7 +999,7 @@
         showTime(Counter);
       }
     });
-  </script>
+  </script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
 
 
 
