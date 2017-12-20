@@ -68,7 +68,7 @@
 <link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="C++,字符串,hiho," />
+  <meta name="keywords" content="字符串,C++,hiho," />
 
 
 
@@ -85,7 +85,7 @@
 
 
 <meta name="description" content="KMP 算法思路关于字符串匹配，常规的思路是用原串中长度等于模式串的子串和模式串比较，如果二者相等那么就成功找到了一个匹配。假设原串长度为 $m$ ， 模式串长度为 $n$，那么我们需要做 $O(m)$ 次字符串比较，每次比较又需要做 $O(n)$ 次字符的比较，这样一来时间复杂度就为 $O(mn)$，并非一个理想的方法。如果使用KMP算法，可以减少匹配中大量重复的匹配，将复杂度缩小到 $O(m">
-<meta name="keywords" content="C++,字符串,hiho">
+<meta name="keywords" content="字符串,C++,hiho">
 <meta property="og:type" content="article">
 <meta property="og:title" content="字符串匹配之KMP算法">
 <meta property="og:url" content="http://yaochg.com/2017/12/13/字符串匹配之KMP算法/index.html">
@@ -93,7 +93,7 @@
 <meta property="og:description" content="KMP 算法思路关于字符串匹配，常规的思路是用原串中长度等于模式串的子串和模式串比较，如果二者相等那么就成功找到了一个匹配。假设原串长度为 $m$ ， 模式串长度为 $n$，那么我们需要做 $O(m)$ 次字符串比较，每次比较又需要做 $O(n)$ 次字符的比较，这样一来时间复杂度就为 $O(mn)$，并非一个理想的方法。如果使用KMP算法，可以减少匹配中大量重复的匹配，将复杂度缩小到 $O(m">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="http://o9w932hp8.bkt.clouddn.com/617514492C260F2F6EE0F03C331D11DB.jpg">
-<meta property="og:updated_time" content="2017-12-14T03:31:54.388Z">
+<meta property="og:updated_time" content="2017-12-20T17:55:15.054Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="字符串匹配之KMP算法">
 <meta name="twitter:description" content="KMP 算法思路关于字符串匹配，常规的思路是用原串中长度等于模式串的子串和模式串比较，如果二者相等那么就成功找到了一个匹配。假设原串长度为 $m$ ， 模式串长度为 $n$，那么我们需要做 $O(m)$ 次字符串比较，每次比较又需要做 $O(n)$ 次字符的比较，这样一来时间复杂度就为 $O(mn)$，并非一个理想的方法。如果使用KMP算法，可以减少匹配中大量重复的匹配，将复杂度缩小到 $O(m">
@@ -318,7 +318,7 @@
       
 
       
-        <h2 id="KMP-算法思路"><a href="#KMP-算法思路" class="headerlink" title="KMP 算法思路"></a>KMP 算法思路</h2><p>关于字符串匹配，常规的思路是用原串中长度等于模式串的子串和模式串比较，如果二者相等那么就成功找到了一个匹配。假设原串长度为 $m$ ， 模式串长度为 $n$，那么我们需要做 $O(m)$ 次字符串比较，每次比较又需要做 $O(n)$ 次字符的比较，这样一来时间复杂度就为 $O(mn)$，并非一个理想的方法。<br>如果使用KMP算法，可以减少匹配中大量重复的匹配，将复杂度缩小到 $O(m + n)$。<br>KMP 的思路是：当遇到两个字符不匹配时（ $origin[p+1]$ 和 $pattern[q+1]$ ），在模式串中，我们从这个不匹配当位置往前看，找到一个最长的子串 $S_1$，这个子串必须满足 <strong>从模式串的起始位置开始也有一个一摸一样的子串 $S_0$</strong>，这样我们就能够把模式串整体右移，用 $S_0$ 去对齐上次匹配时原串中与 $S_1$对齐的位置。<br><img src="http://o9w932hp8.bkt.clouddn.com/617514492C260F2F6EE0F03C331D11DB.jpg" alt="IMAGE"><br>这样我们可以直接令 $q = next(q)$ , 然后继续匹配 $origin[p+1]$ 和 $pattern[q+1]$，从而省去了常规思路中的回退和不必要的匹配。</p>
+        <h2 id="KMP-算法思路"><a href="#KMP-算法思路" class="headerlink" title="KMP 算法思路"></a>KMP 算法思路</h2><p>关于字符串匹配，常规的思路是用原串中长度等于模式串的子串和模式串比较，如果二者相等那么就成功找到了一个匹配。假设原串长度为 $m$ ， 模式串长度为 $n$，那么我们需要做 $O(m)$ 次字符串比较，每次比较又需要做 $O(n)$ 次字符的比较，这样一来时间复杂度就为 $O(mn)$，并非一个理想的方法。<br>如果使用KMP算法，可以减少匹配中大量重复的匹配，将复杂度缩小到 $O(m + n)$。<br>KMP 的思路是：当遇到两个字符不匹配时（ $origin[p+1]$ 和 $pattern[q+1]$ ），在模式串中，我们从这个不匹配的位置往前看，找到一个最长的子串 $S_1$，这个子串必须满足 <strong>从模式串的起始位置开始也有一个一摸一样的子串 $S_0$</strong>，这样我们就能够把模式串整体右移，用 $S_0$ 去对齐上次匹配时原串中与 $S_1$对齐的位置。<br><img src="http://o9w932hp8.bkt.clouddn.com/617514492C260F2F6EE0F03C331D11DB.jpg" alt="IMAGE"><br>这样我们可以直接令 $q = next(q)$ , 然后继续匹配 $origin[p+1]$ 和 $pattern[q+1]$，从而省去了常规思路中的回退和不必要的匹配。</p>
 <h2 id="next-数组"><a href="#next-数组" class="headerlink" title="next 数组"></a>next 数组</h2><p>容易看出，我们要使用 KMP 算法时，需要预先计算出模式串中每个位置 $q$ 的 $next(q)$ , 得到一个$next$ 数组，然后每次不匹配时就去查这个数组，找到对应的值。根据上图可以看出：我们分别从 $pattern[0]$ 向后和从 $pattern[q]$向前去找最长的相同的字符串 $S_0$ 和 $S_1$ ， $S_0$ 的最后一位就是 $next(q)$ 。但是这样的话时间复杂度就正比与 $q$，而求解整个 $next$ 数组的时间复杂度就是 $O(n^2)$ , 显然不是一个满意的结果。但是如果你用该方法去求解一个模式串的 $next$ 数组后你就会发现起始 $next(q)$ 和 $next(q-1)$ 是相关的。如果  $pattern[q] = pattern[next(q-1)+1]$ ,那么 $next(q) = next(q-1)+1 $ ,并且这种关系是可以一直递推下去的，这样我们就能近似在 $O(n)$ 的时间复杂度内求出 $next$ 数组。<br>接下来我们以模式 <code>bababb</code> 为例求解它的 $next$ 数组：<br>1.$\quad$首先将 $next(0)$ 置为 -1</p>
 <table>
 <thead>
@@ -548,9 +548,9 @@
       
         <div class="post-tags">
           
-            <a href="/tags/C/" rel="tag">#C++</a>
-          
             <a href="/tags/字符串/" rel="tag">#字符串</a>
+          
+            <a href="/tags/C/" rel="tag">#C++</a>
           
             <a href="/tags/hiho/" rel="tag">#hiho</a>
           
@@ -568,6 +568,10 @@
           </div>
 
           <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/12/21/最长回文子串/" rel="prev" title="最长回文子串">
+                最长回文子串 <i class="fa fa-chevron-right"></i>
+              </a>
             
           </div>
         </div>
@@ -658,7 +662,7 @@
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">6</span>
+              <span class="site-state-item-count">7</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
@@ -675,7 +679,7 @@
           
             <div class="site-state-item site-state-tags">
               <a href="/tags">
-                <span class="site-state-item-count">13</span>
+                <span class="site-state-item-count">14</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>
