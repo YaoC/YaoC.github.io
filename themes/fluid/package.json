@@ -37,8 +37,5 @@
     "hooks": {
       "pre-commit": "npm run lint"
     }
-  },
-  "__npminstall_done": "Wed Oct 07 2020 01:22:48 GMT+0800 (GMT+08:00)",
-  "_from": "hexo-theme-fluid@1.8.3",
-  "_resolved": "https://registry.npm.taobao.org/hexo-theme-fluid/download/hexo-theme-fluid-1.8.3.tgz"
+  }
 }
