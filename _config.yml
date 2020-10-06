@@ -12,7 +12,7 @@ keywords:
 - 'Go'
 - 'Computer Science'
 author: ChengYao
-language: zh
+language: zh-CN
 timezone: ''
 
 # URL
@@ -102,16 +102,16 @@ ignore:
 # Extensions
 ## Plugins: https://hexo.io/plugins/
 ## Themes: https://hexo.io/themes/
-theme: tree
+theme: fluid
 
 # tree 主题配置
-theme_config:
-  author: ChengYao
-  links:
-    github: https://github.com/yaoc
-  valine:
-    appID: C7OxrU7UVGU7bLAucSHORscj-gzGzoHsz
-    appKey: Lju52NysRRMDdIWn6lTXhtcO
+#theme_config:
+#  author: ChengYao
+#  links:
+#    github: https://github.com/yaoc
+#  valine:
+#    appID: C7OxrU7UVGU7bLAucSHORscj-gzGzoHsz
+#    appKey: Lju52NysRRMDdIWn6lTXhtcO
 
 
 # Deployment
