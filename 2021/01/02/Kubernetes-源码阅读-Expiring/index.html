@@ -17,7 +17,7 @@
   <meta name="description" content="You&#39;ll never walk alone">
   <meta name="author" content="ChengYao">
   <meta name="keywords" content="Cloud Native,Kubernetes,Go,Computer Science">
-  <title>Kubernetes 源码阅读 -- Indexer - yaoChg&#39;s notebook</title>
+  <title>Kubernetes 源码阅读 -- Expiring - yaoChg&#39;s notebook</title>
 
   <link  rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/css/bootstrap.min.css" />
 
@@ -165,8 +165,8 @@
   
     <span class="post-meta">
       <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-      <time datetime="2020-10-22 15:36" pubdate>
-        2020年10月22日 下午
+      <time datetime="2021-01-02 21:54" pubdate>
+        2021年1月2日 晚上
       </time>
     </span>
   
@@ -177,7 +177,7 @@
     
     <span class="post-meta mr-2">
       <i class="iconfont icon-chart"></i>
-      720 字
+      1.1k 字
     </span>
   
 
@@ -187,7 +187,7 @@
       <i class="iconfont icon-clock-fill"></i>
       
       
-      12
+      18
        分钟
     </span>
   
@@ -225,83 +225,160 @@
         <div class="py-5" id="board">
           <article class="post-content mx-auto" id="post">
             <!-- SEO header -->
-            <h1 style="display: none">Kubernetes 源码阅读 -- Indexer</h1>
+            <h1 style="display: none">Kubernetes 源码阅读 -- Expiring</h1>
             
             <div class="markdown-body" id="post-body">
-              <h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p><a target="_blank" rel="noopener" href="https://github.com/kubernetes/client-go/blob/d1a4fe5f2d96df815903781843870155cb4f5f40/tools/cache/index.go#L35"><code>Indexer</code></a> 是 kubernetes 中用于在内存中缓存资源对象的接口，支持通过 Key 对存储的资源对象进行增、删、查、改操作， 同时也可以对存储的对象进行倒排索引。</p>
-<p><code>cache</code> 是 <code>Indexer</code> 的实现方式，其定义如下：</p>
-<pre><code class="hljs Go"><span class="hljs-keyword">type</span> cache <span class="hljs-keyword">struct</span> &#123;
-    cacheStorage    ThreadSafeStore
-    keyFunc         KeyFunc
+              <h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p><a target="_blank" rel="noopener" href="https://github.com/kubernetes/apimachinery/blob/v0.20.1/pkg/util/cache/expiring.go"><code>Expiring</code></a> 是 Kubernets 中的一个 <strong>带有过期时间的键值对缓存</strong>，位于 <code>k8s.io/apimachinery</code> 模块的 <code>pkg/util/cache</code> 包中。</p>
+<p><code>Expiring</code> 具有以下功能与特性：</p>
+<ul>
+<li>可以存取任意类型的键值对</li>
+<li>键值对在过期后会被自动清除</li>
+<li>线程安全</li>
+</ul>
+<pre><code class="hljs Go"><span class="hljs-comment">// 添加带过期时间的键值对</span>
+<span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-params">(c *Expiring)</span> <span class="hljs-title">Set</span><span class="hljs-params">(key <span class="hljs-keyword">interface</span>&#123;&#125;, val <span class="hljs-keyword">interface</span>&#123;&#125;, ttl time.Duration)</span></span>
+
+<span class="hljs-comment">// 根据 key 获取 value</span>
+<span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-params">(c *Expiring)</span> <span class="hljs-title">Get</span><span class="hljs-params">(key <span class="hljs-keyword">interface</span>&#123;&#125;)</span> <span class="hljs-params">(val <span class="hljs-keyword">interface</span>&#123;&#125;, ok <span class="hljs-keyword">bool</span>)</span></span>
+
+<span class="hljs-comment">// 根据 key 删除键值对</span>
+<span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-params">(c *Expiring)</span> <span class="hljs-title">Delete</span><span class="hljs-params">(key <span class="hljs-keyword">interface</span>&#123;&#125;)</span></span>
+
+<span class="hljs-comment">// 获取 Expiring 中存储的键值对数量</span>
+<span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-params">(c *Expiring)</span> <span class="hljs-title">Len</span><span class="hljs-params">()</span></span></code></pre>
+
+<h2 id="Expiring-的数据结构"><a href="#Expiring-的数据结构" class="headerlink" title="Expiring 的数据结构"></a>Expiring 的数据结构</h2><p>基于上述的功能与特性，<code>Expiring</code> 提供了以下方法：</p>
+<p><code>Expiring</code> 的数据结构设计如下：</p>
+<pre><code class="hljs Go"><span class="hljs-keyword">type</span> Expiring <span class="hljs-keyword">struct</span> &#123;
+    <span class="hljs-comment">// 时钟接口，使用该接口主要是为了便于测试</span>
+    <span class="hljs-comment">// 在 Expiring 中用到其中的 Now 方法，该方法可以直接看作 time.Now</span>
+    clock utilclock.Clock
+    <span class="hljs-comment">// 读写锁，用于保证线程安全</span>
+    mu sync.RWMutex
+    <span class="hljs-comment">// 实际存储键值对的数据结构</span>
+    cache <span class="hljs-keyword">map</span>[<span class="hljs-keyword">interface</span>&#123;&#125;]entry
+    <span class="hljs-comment">// 全局版本号，用来实现键值对过期时间的更新</span>
+    generation <span class="hljs-keyword">uint64</span>
+    <span class="hljs-comment">// 存储过期时间的最小堆</span>
+    heap expiringHeap
 &#125;</code></pre>
 
-<p><code>ThreadSafeStore</code> 定义了一个线程安全的存储接口，由 <code>threadSafeMap</code> 实现。</p>
-<p>ThreadSafeStore 与 Indexer 非常相似，前者可以看作是后者的一种特例。ThreadSafeStore 操作资源对象时需要指定对象的 key，而 Indexer 则不需要，是在 Indexer 的实现结构 cache 中通过 <code>keyFunc</code> 动态计算资源对象的 key。因此可以认为 <code>Indexer = ThreadSafeStore + KeyFunc</code>。</p>
-<h2 id="Indexer"><a href="#Indexer" class="headerlink" title="Indexer"></a>Indexer</h2><p>Indexer 与其它数据结构的关系如下：<br><img src="http://lc-c7oxru7u.cn-n1.lcfile.com/c34bc3865ff4230a648a.png/diagram-16025179975213868166.png" srcset="/img/loading.gif" alt="Indexer UML"></p>
-<p>从图中可以看出没有索引的 cache 就是一个 Store，源码中 Indexer 和 Store 的创建方式分别如下：</p>
-<pre><code class="hljs GO"><span class="hljs-comment">// NewStore returns a Store implemented simply with a map and a lock.</span>
-<span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">NewStore</span><span class="hljs-params">(keyFunc KeyFunc)</span> <span class="hljs-title">Store</span></span> &#123;
-    <span class="hljs-keyword">return</span> &amp;cache&#123;
-        cacheStorage: NewThreadSafeStore(Indexers&#123;&#125;, Indices&#123;&#125;),
-        keyFunc:      keyFunc,
+<p>其中 <code>entry</code> 的数据结构如下：</p>
+<pre><code class="hljs Go"><span class="hljs-keyword">type</span> entry <span class="hljs-keyword">struct</span> &#123;
+    <span class="hljs-comment">// 用户输入的 value</span>
+    val        <span class="hljs-keyword">interface</span>&#123;&#125;
+    <span class="hljs-comment">// 用户指定的过期时间</span>
+    expiry     time.Time
+    <span class="hljs-comment">// 存储当前键值对时 Expiring 的版本号</span>
+    generation <span class="hljs-keyword">uint64</span>
+&#125;</code></pre>
+
+<h3 id="expiringHeap"><a href="#expiringHeap" class="headerlink" title="expiringHeap"></a>expiringHeap</h3><p><a target="_blank" rel="noopener" href="https://github.com/kubernetes/apimachinery/blob/v0.20.1/pkg/util/cache/expiring.go#L168"><code>expiringHeap</code></a> 是一个存储键值对过期时间的最小堆，其数据结构如下：</p>
+<pre><code class="hljs Go"><span class="hljs-keyword">type</span> expiringHeap []*expiringHeapEntry
+
+<span class="hljs-keyword">type</span> expiringHeapEntry <span class="hljs-keyword">struct</span> &#123;
+    <span class="hljs-comment">// 用户输入的 key</span>
+    key        <span class="hljs-keyword">interface</span>&#123;&#125;
+    <span class="hljs-comment">// 过期时间</span>
+    expiry     time.Time
+    <span class="hljs-comment">// 存储当前键值对时 Expiring 的版本号</span>
+    generation <span class="hljs-keyword">uint64</span>
+&#125;
+
+<span class="hljs-comment">// expiringHeap 实现了 heap.Interface 接口</span>
+<span class="hljs-comment">// 即可以当作堆来使用</span>
+<span class="hljs-keyword">var</span> _ heap.Interface = &amp;expiringHeap&#123;&#125;
+
+<span class="hljs-comment">// 比较的是过期时间</span>
+<span class="hljs-comment">// expiringHeapEntry 中的元素 i 小于 元素 j 当且仅当 i 的过期时间小于 j 的过期时间</span>
+<span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-params">(cq expiringHeap)</span> <span class="hljs-title">Less</span><span class="hljs-params">(i, j <span class="hljs-keyword">int</span>)</span> <span class="hljs-title">bool</span></span> &#123;
+    <span class="hljs-keyword">return</span> cq[i].expiry.Before(cq[j].expiry)
+&#125;
+
+<span class="hljs-comment">// heap.Interface 的其它方法的实现较为常见，在此忽略</span></code></pre>
+
+<h2 id="Expiring-的实现"><a href="#Expiring-的实现" class="headerlink" title="Expiring 的实现"></a>Expiring 的实现</h2><h3 id="Set"><a href="#Set" class="headerlink" title="Set"></a>Set</h3><pre><code class="hljs Go"><span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-params">(c *Expiring)</span> <span class="hljs-title">Set</span><span class="hljs-params">(key <span class="hljs-keyword">interface</span>&#123;&#125;, val <span class="hljs-keyword">interface</span>&#123;&#125;, ttl time.Duration)</span></span> &#123;
+    <span class="hljs-comment">// 计算超时时间</span>
+    now := c.clock.Now()
+    expiry := now.Add(ttl)
+
+    <span class="hljs-comment">// 加写锁保证线程安全</span>
+    c.mu.Lock()
+    <span class="hljs-keyword">defer</span> c.mu.Unlock()
+
+    <span class="hljs-comment">// 全局版本号自增</span>
+    c.generation++
+
+    <span class="hljs-comment">// 存储 value</span>
+    c.cache[key] = entry&#123;
+        val:        val,
+        expiry:     expiry,
+        generation: c.generation,
+    &#125;
+
+    <span class="hljs-comment">// 清理已过期的键值对</span>
+    <span class="hljs-comment">// Run GC inline before pushing the new entry.</span>
+    c.gc(now)
+
+    <span class="hljs-comment">// 过期时间存入最小堆中</span>
+    heap.Push(&amp;c.heap, &amp;expiringHeapEntry&#123;
+        key:        key,
+        expiry:     expiry,
+        generation: c.generation,
+    &#125;)
+&#125;</code></pre>
+
+<h4 id="Get"><a href="#Get" class="headerlink" title="Get"></a>Get</h4><pre><code class="hljs Go"><span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-params">(c *Expiring)</span> <span class="hljs-title">Get</span><span class="hljs-params">(key <span class="hljs-keyword">interface</span>&#123;&#125;)</span> <span class="hljs-params">(val <span class="hljs-keyword">interface</span>&#123;&#125;, ok <span class="hljs-keyword">bool</span>)</span></span> &#123;
+    <span class="hljs-comment">// 加读锁保证线程安全</span>
+    c.mu.RLock()
+    <span class="hljs-keyword">defer</span> c.mu.RUnlock()
+    e, ok := c.cache[key]
+    <span class="hljs-keyword">if</span> !ok || !c.clock.Now().Before(e.expiry) &#123;
+        <span class="hljs-comment">// 如果键值对存在但已过期则当作不存在返回</span>
+        <span class="hljs-keyword">return</span> <span class="hljs-literal">nil</span>, <span class="hljs-literal">false</span>
+    &#125;
+    <span class="hljs-keyword">return</span> e.val, <span class="hljs-literal">true</span>
+&#125;</code></pre>
+
+<h3 id="清理过期的键值对"><a href="#清理过期的键值对" class="headerlink" title="清理过期的键值对"></a>清理过期的键值对</h3><pre><code class="hljs Go"><span class="hljs-comment">// 将 Expiring 所有过期的键值对清除</span>
+<span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-params">(c *Expiring)</span> <span class="hljs-title">gc</span><span class="hljs-params">(now time.Time)</span></span> &#123;
+    <span class="hljs-keyword">for</span> &#123;
+        <span class="hljs-keyword">if</span> <span class="hljs-built_in">len</span>(c.heap) == <span class="hljs-number">0</span> || now.Before(c.heap[<span class="hljs-number">0</span>].expiry) &#123;
+            <span class="hljs-comment">// 因为过期时间的 entry 以最小堆的形式组织</span>
+            <span class="hljs-comment">// 所以如果第一个元素没有过期的话其余的元素也肯定没有过期</span>
+            <span class="hljs-keyword">return</span>
+        &#125;
+        cleanup := heap.Pop(&amp;c.heap).(*expiringHeapEntry)
+        <span class="hljs-comment">// 执行清理操作</span>
+        c.del(cleanup.key, cleanup.generation)
     &#125;
 &#125;
 
-<span class="hljs-comment">// NewIndexer returns an Indexer implemented simply with a map and a lock.</span>
-<span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">NewIndexer</span><span class="hljs-params">(keyFunc KeyFunc, indexers Indexers)</span> <span class="hljs-title">Indexer</span></span> &#123;
-    <span class="hljs-keyword">return</span> &amp;cache&#123;
-        cacheStorage: NewThreadSafeStore(indexers, Indices&#123;&#125;),
-        keyFunc:      keyFunc,
+<span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-params">(c *Expiring)</span> <span class="hljs-title">del</span><span class="hljs-params">(key <span class="hljs-keyword">interface</span>&#123;&#125;, generation <span class="hljs-keyword">uint64</span>)</span></span> &#123;
+    e, ok := c.cache[key]
+    <span class="hljs-keyword">if</span> !ok &#123;
+        <span class="hljs-keyword">return</span>
     &#125;
-
-<span class="hljs-keyword">type</span> KeyFunc <span class="hljs-function"><span class="hljs-keyword">func</span><span class="hljs-params">(obj <span class="hljs-keyword">interface</span>&#123;&#125;)</span> <span class="hljs-params">(<span class="hljs-keyword">string</span>, error)</span></span></code></pre>
-
-<p><code>ThreadSafeStore</code> 通过 <code>indexers</code> 创建索引，indexers 是一个如下的 map：</p>
-<pre><code class="hljs GO"><span class="hljs-keyword">type</span> Indexers <span class="hljs-keyword">map</span>[<span class="hljs-keyword">string</span>]IndexFunc
-
-<span class="hljs-keyword">type</span> IndexFunc <span class="hljs-function"><span class="hljs-keyword">func</span><span class="hljs-params">(obj <span class="hljs-keyword">interface</span>&#123;&#125;)</span> <span class="hljs-params">([]<span class="hljs-keyword">string</span>, error)</span></span></code></pre>
-
-<p>Indexers 的 Key 是索引名称，值是 <em>根据资源对象创建计算该索引的索引值的函数</em></p>
-<p><code>Indices</code> 是存储倒排索引的数据结构：</p>
-<pre><code class="hljs Go"><span class="hljs-keyword">type</span> Indices <span class="hljs-keyword">map</span>[<span class="hljs-keyword">string</span>]Index
-
-<span class="hljs-keyword">type</span> Index <span class="hljs-keyword">map</span>[<span class="hljs-keyword">string</span>]sets.String</code></pre>
-
-<p>Indices 的 Key 是索引名, 值是对应的索引 Index<br>Index 的 Key 是索引值，值是具有该索引值的资源对象的 Key</p>
-<h2 id="KeyFunc-与-IndexFunc"><a href="#KeyFunc-与-IndexFunc" class="headerlink" title="KeyFunc 与 IndexFunc"></a>KeyFunc 与 IndexFunc</h2><p>KeyFunc 与 IndexFunc 对比如下：</p>
-<ul>
-<li>KeyFunc: f(obj) -&gt; key</li>
-<li>IndexFunc: f(obj) -&gt; indexValue1, indexValue2 …</li>
-</ul>
-<p>由上对比可知 KeyFunc 是 IndexFunc 的一个特例，当 IndexFunc 只返回一个索引值时它就退化为 KeyFunc，client-go 中也提供了由 IndexFunc 到 KeyFunc 的适配函数：</p>
-<pre><code class="hljs Go"><span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">IndexFuncToKeyFuncAdapter</span><span class="hljs-params">(indexFunc IndexFunc)</span> <span class="hljs-title">KeyFunc</span></span> &#123;
-    <span class="hljs-keyword">return</span> <span class="hljs-function"><span class="hljs-keyword">func</span><span class="hljs-params">(obj <span class="hljs-keyword">interface</span>&#123;&#125;)</span> <span class="hljs-params">(<span class="hljs-keyword">string</span>, error)</span></span> &#123;
-        indexKeys, err := indexFunc(obj)
-        <span class="hljs-keyword">if</span> err != <span class="hljs-literal">nil</span> &#123;
-            <span class="hljs-keyword">return</span> <span class="hljs-string">&quot;&quot;</span>, err
-        &#125;
-        <span class="hljs-keyword">if</span> <span class="hljs-built_in">len</span>(indexKeys) &gt; <span class="hljs-number">1</span> &#123;
-            <span class="hljs-keyword">return</span> <span class="hljs-string">&quot;&quot;</span>, fmt.Errorf(<span class="hljs-string">&quot;too many keys: %v&quot;</span>, indexKeys)
-        &#125;
-        <span class="hljs-keyword">if</span> <span class="hljs-built_in">len</span>(indexKeys) == <span class="hljs-number">0</span> &#123;
-            <span class="hljs-keyword">return</span> <span class="hljs-string">&quot;&quot;</span>, fmt.Errorf(<span class="hljs-string">&quot;unexpected empty indexKeys&quot;</span>)
-        &#125;
-        <span class="hljs-keyword">return</span> indexKeys[<span class="hljs-number">0</span>], <span class="hljs-literal">nil</span>
+    <span class="hljs-comment">// generation == 0 标识该方法是由 Delete 调用的，键值对一定需要删除</span>
+    <span class="hljs-comment">// generation != 0 则说明该方法由 gc 调用</span>
+    <span class="hljs-comment">//      当 gc 调用该方法时如果该键值对在 cache 中存储的过期时间与在最小堆中存储的版本号不一致则说明</span>
+    <span class="hljs-comment">//      该键值对被更新过，当前的过期时间 entry 已经无效了，忽略就行（堆中还存在着该键值对的其它过期时间 entry）</span>
+    <span class="hljs-keyword">if</span> generation != <span class="hljs-number">0</span> &amp;&amp; generation != e.generation &#123;
+        <span class="hljs-keyword">return</span>
     &#125;
+    <span class="hljs-built_in">delete</span>(c.cache, key)
+&#125;
+
+<span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-params">(c *Expiring)</span> <span class="hljs-title">Delete</span><span class="hljs-params">(key <span class="hljs-keyword">interface</span>&#123;&#125;)</span></span> &#123;
+    c.mu.Lock()
+    <span class="hljs-keyword">defer</span> c.mu.Unlock()
+    c.del(key, <span class="hljs-number">0</span>)
 &#125;</code></pre>
 
-<p>常用的 KeyFunc 有 <code>MetaNamespaceKeyFunc</code>, 即 f(obj) -&gt; namespace/name<br>常用的 IndexFunc 则有 <code>MetaNamespaceIndexFunc</code>, 即 f(obj) -&gt; [namespace]</p>
-<h2 id="threadSafeMap"><a href="#threadSafeMap" class="headerlink" title="threadSafeMap"></a>threadSafeMap</h2><p><code>threadSafeMap</code> 是 <code>ThreadSafeStore</code> 的具体实现，通过 <code>sync.RWMutex</code> 实现线程安全。threadSafeMap 只能保证其定义的操作是线程安全的，直接对 Get/List 等操作返回的结果进行修改是无法保证的。</p>
-<p>threadSafeMap 的数据结构如下，它的增删查改操作主要就是操作 <code>items</code>，同时通过 indexers 计算资源对象在各个索引中的值，通过  <code>updateIndices</code> 和 <code>deleteFromIndices</code> 对 <code>indices</code> 进行更新。</p>
-<pre><code class="hljs Go"><span class="hljs-keyword">type</span> threadSafeMap <span class="hljs-keyword">struct</span> &#123;
-    lock  sync.RWMutex
-    items <span class="hljs-keyword">map</span>[<span class="hljs-keyword">string</span>]<span class="hljs-keyword">interface</span>&#123;&#125;
-
-    <span class="hljs-comment">// indexers maps a name to an IndexFunc</span>
-    indexers Indexers
-    <span class="hljs-comment">// indices maps a name to an Index</span>
-    indices Indices
-&#125;</code></pre>
+<h3 id="utilclock-Clock"><a href="#utilclock-Clock" class="headerlink" title="utilclock.Clock"></a>utilclock.Clock</h3><p>在测试 <code>Expiring</code> 时，添加键值对需要指定过期时间，这可能导致测试时间变得很长，<br><code>Expiring</code> 中引入 <a target="_blank" rel="noopener" href="https://github.com/kubernetes/apimachinery/blob/v0.20.1/pkg/util/clock/clock.go"><code>utilclock.Clock</code></a> 能够让测试变得更加简单迅速。</p>
+<p>在实际使用时，<code>Expiring</code> 使用的是 <a target="_blank" rel="noopener" href="https://github.com/kubernetes/apimachinery/blob/v0.20.1/pkg/util/clock/clock.go#L43"><code>RealClock</code></a>，它使用的是真实的时间。</p>
+<p>而在测试时则可以使用 <a target="_blank" rel="noopener" href="https://github.com/kubernetes/apimachinery/blob/v0.20.1/pkg/util/clock/clock.go#L85"><code>FakeClock</code></a> 来 “快进” 到任意时间。</p>
+<p>下一篇文章将对 <code>Clock</code> 进行详细的介绍。</p>
 
             </div>
             <hr>
@@ -323,7 +400,9 @@
                     
                       <a class="hover-with-bg" href="/tags/%E6%BA%90%E7%A0%81/">源码</a>
                     
-                      <a class="hover-with-bg" href="/tags/client-go/">client-go</a>
+                      <a class="hover-with-bg" href="/tags/cache/">cache</a>
+                    
+                      <a class="hover-with-bg" href="/tags/apimachinery/">apimachinery</a>
                     
                   </div>
                 
@@ -336,15 +415,15 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/2021/01/02/Kubernetes-%E6%BA%90%E7%A0%81%E9%98%85%E8%AF%BB-Expiring/">
-                        <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">Kubernetes 源码阅读 -- Expiring</span>
-                        <span class="visible-mobile">上一篇</span>
-                      </a>
-                    
                   </article>
                   <article class="post-next col-6">
                     
+                    
+                      <a href="/2020/10/22/Kubernetes-%E6%BA%90%E7%A0%81%E9%98%85%E8%AF%BB-Indexer/">
+                        <span class="hidden-mobile">Kubernetes 源码阅读 -- Indexer</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
                     
                   </article>
                 </div>
@@ -627,7 +706,7 @@
       if ('true' === 'true') {
         var viewCtn = document.querySelector('#leancloud-post-views-container');
         if (viewCtn || enableIncr) {
-          var target = decodeURI('/2020/10/22/Kubernetes-%E6%BA%90%E7%A0%81%E9%98%85%E8%AF%BB-Indexer/');
+          var target = decodeURI('/2021/01/02/Kubernetes-%E6%BA%90%E7%A0%81%E9%98%85%E8%AF%BB-Expiring/');
           var viewGetter = getRecord(Counter, target).then((record) => {
             incrArr.push(buildIncrement(record.objectId))
             if (viewCtn) {
@@ -721,7 +800,7 @@
     var typed = new Typed('#subtitle', {
       strings: [
         '  ',
-        "Kubernetes 源码阅读 -- Indexer&nbsp;",
+        "Kubernetes 源码阅读 -- Expiring&nbsp;",
       ],
       cursorChar: "_",
       typeSpeed: 70,
