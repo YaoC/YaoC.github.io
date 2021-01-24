@@ -17,7 +17,7 @@
   <meta name="description" content="You&#39;ll never walk alone">
   <meta name="author" content="ChengYao">
   <meta name="keywords" content="Cloud Native,Kubernetes,Go,Computer Science">
-  <title>分类 - yaoChg&#39;s notebook</title>
+  <title>标签 - golang - yaoChg&#39;s notebook</title>
 
   <link  rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/css/bootstrap.min.css" />
 
@@ -43,7 +43,7 @@
 
 
 <body>
-  <header style="height: 60vh;">
+  <header style="height: 80vh;">
     <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
   <div class="container">
     <a class="navbar-brand"
@@ -166,97 +166,22 @@
               <div class="col-12 col-md-10 m-auto">
                 
 
-
-
-
-
-
-
-<div class="category-list">
-  
-  
-  
+<div class="list-group">
+  <p class="h4">共计 1 篇文章</p>
+  <hr>
   
     
-    
-    <div class="category row">
-      <a
-        class="category-item collapsed list-group-item category-item-action col-10 col-md-11"
-        id="heading-ckgkztjux0001uffy77h0ep4s" role="tab" data-toggle="collapse" href="#collapse-ckgkztjux0001uffy77h0ep4s"
-        aria-expanded="false"
-      >
-        kubernetes
-        <i class="iconfont icon-arrowright"></i>
-      </a>
-      <a href="/categories/kubernetes/" class="category-count col-2 col-md-1">
-        <i class="iconfont icon-articles"></i>
-        <span>2</span>
-      </a>
-      <div class="category-collapse">
-        
-          
-  <div id="collapse-ckgkztjux0001uffy77h0ep4s" class="collapse in" role="tabpanel"
-       aria-labelledby="heading-ckgkztjux0001uffy77h0ep4s">
-    
-    
-    
       
-      
-        <a href="/2021/01/02/Kubernetes-%E6%BA%90%E7%A0%81%E9%98%85%E8%AF%BB-Expiring/" class="list-group-item list-group-item-action">
-          <span class="category-post">Kubernetes 源码阅读 -- Expiring</span>
-        </a>
-      
+      <p class="h5">2021</p>
     
-      
-      
-        <a href="/2020/10/22/Kubernetes-%E6%BA%90%E7%A0%81%E9%98%85%E8%AF%BB-Indexer/" class="list-group-item list-group-item-action">
-          <span class="category-post">Kubernetes 源码阅读 -- Indexer</span>
-        </a>
-      
-    
-  </div>
-
-        
-      </div>
-    </div>
-  
-    
-    
-    <div class="category row">
-      <a
-        class="category-item collapsed list-group-item category-item-action col-10 col-md-11"
-        id="heading-ckkbde2tw0001z2u43aza20wj" role="tab" data-toggle="collapse" href="#collapse-ckkbde2tw0001z2u43aza20wj"
-        aria-expanded="false"
-      >
-        golang
-        <i class="iconfont icon-arrowright"></i>
-      </a>
-      <a href="/categories/golang/" class="category-count col-2 col-md-1">
-        <i class="iconfont icon-articles"></i>
-        <span>1</span>
-      </a>
-      <div class="category-collapse">
-        
-          
-  <div id="collapse-ckkbde2tw0001z2u43aza20wj" class="collapse in" role="tabpanel"
-       aria-labelledby="heading-ckkbde2tw0001z2u43aza20wj">
-    
-    
-    
-      
-      
-        <a href="/2021/01/25/sync-Once%E4%B8%AD%E7%9A%84%E5%BF%AB%E9%80%9F%E8%B7%AF%E5%BE%84/" class="list-group-item list-group-item-action">
-          <span class="category-post">sync.Once中的快速路径</span>
-        </a>
-      
-    
-  </div>
-
-        
-      </div>
-    </div>
+    <a href="/2021/01/25/sync-Once%E4%B8%AD%E7%9A%84%E5%BF%AB%E9%80%9F%E8%B7%AF%E5%BE%84/" class="list-group-item list-group-item-action">
+      <span class="archive-post-title">sync.Once中的快速路径</span>
+      <time style="float: right;">01-25</time>
+    </a>
   
 </div>
+
+
 
               </div>
             </div>
@@ -487,7 +412,7 @@
       if ('false' === 'true') {
         var viewCtn = document.querySelector('#leancloud-post-views-container');
         if (viewCtn || enableIncr) {
-          var target = decodeURI('/categories/index.html');
+          var target = decodeURI('/tags/golang/index.html');
           var viewGetter = getRecord(Counter, target).then((record) => {
             incrArr.push(buildIncrement(record.objectId))
             if (viewCtn) {
@@ -556,7 +481,7 @@
     var typed = new Typed('#subtitle', {
       strings: [
         '  ',
-        "分类&nbsp;",
+        "标签 - golang&nbsp;",
       ],
       cursorChar: "_",
       typeSpeed: 70,

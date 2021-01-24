@@ -4,6 +4,35 @@
   
   
   <entry>
+    <title>sync.Once中的快速路径</title>
+    <link href="/2021/01/25/sync-Once%E4%B8%AD%E7%9A%84%E5%BF%AB%E9%80%9F%E8%B7%AF%E5%BE%84/"/>
+    <url>/2021/01/25/sync-Once%E4%B8%AD%E7%9A%84%E5%BF%AB%E9%80%9F%E8%B7%AF%E5%BE%84/</url>
+    
+    <content type="html"><![CDATA[<p><code>sync.Once</code> 的 <a href="https://github.com/golang/go/blob/b634f5d97a6e65f19057c00ed2095a1a872c7fa8/src/sync/once.go#L42"><code>Do</code></a> 方法中有这样一个技巧：先用原子操作 <strong>快速</strong> 判断是否执行过, 如果没有执行过（<code>done == 0</code>）再加锁执行 <code>f</code> 方法。</p><pre><code class="hljs Go"><span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-params">(o *Once)</span> <span class="hljs-title">Do</span><span class="hljs-params">(f <span class="hljs-keyword">func</span>()</span>)</span> &#123;    <span class="hljs-keyword">if</span> atomic.LoadUint32(&amp;o.done) == <span class="hljs-number">0</span> &#123;        o.doSlow(f)    &#125;&#125;<span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-params">(o *Once)</span> <span class="hljs-title">doSlow</span><span class="hljs-params">(f <span class="hljs-keyword">func</span>()</span>)</span> &#123;    o.m.Lock()    <span class="hljs-keyword">defer</span> o.m.Unlock()    <span class="hljs-keyword">if</span> o.done == <span class="hljs-number">0</span> &#123;        <span class="hljs-keyword">defer</span> atomic.StoreUint32(&amp;o.done, <span class="hljs-number">1</span>)        f()    &#125;&#125;</code></pre><p>其实这里完全可以直接执行 <code>doSlow</code> 方法，因为它内部已经加锁了，即便有并发执行也不会有任何问题。</p><pre><code class="hljs Go"><span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-params">(o *Once)</span> <span class="hljs-title">Do</span><span class="hljs-params">(f <span class="hljs-keyword">func</span>()</span>)</span> &#123;    o.m.Lock()    <span class="hljs-keyword">defer</span> o.m.Unlock()    <span class="hljs-keyword">if</span> o.done == <span class="hljs-number">0</span> &#123;        <span class="hljs-keyword">defer</span> atomic.StoreUint32(&amp;o.done, <span class="hljs-number">1</span>)        f()    &#125;&#125;</code></pre><p>之所以要多此一举是因为 <strong>原子操作的性能要优于加锁</strong> ，对于 <code>Do</code> 方法来说，大部分调用 <code>done</code> 都是不等于 0 的，因此这样做避免了对大部分的调用进行加锁判断（只有最初的 <strong>一次或几次并发调用</strong> 会进入到 <code>doSlow</code> 方法），是一种非常经典的编程范式。</p>]]></content>
+    
+    
+    <categories>
+      
+      <category>golang</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>源码</tag>
+      
+      <tag>golang</tag>
+      
+      <tag>编程范式</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
     <title>Kubernetes 源码阅读 -- Expiring</title>
     <link href="/2021/01/02/Kubernetes-%E6%BA%90%E7%A0%81%E9%98%85%E8%AF%BB-Expiring/"/>
     <url>/2021/01/02/Kubernetes-%E6%BA%90%E7%A0%81%E9%98%85%E8%AF%BB-Expiring/</url>
