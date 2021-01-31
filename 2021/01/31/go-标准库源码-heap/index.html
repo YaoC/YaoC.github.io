@@ -17,7 +17,7 @@
   <meta name="description" content="You&#39;ll never walk alone">
   <meta name="author" content="ChengYao">
   <meta name="keywords" content="Cloud Native,Kubernetes,Go,Computer Science">
-  <title>Kubernetes 源码阅读 -- Expiring - yaoChg&#39;s notebook</title>
+  <title>go 标准库的 heap - yaoChg&#39;s notebook</title>
 
   <link  rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/css/bootstrap.min.css" />
 
@@ -165,8 +165,8 @@
   
     <span class="post-meta">
       <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-      <time datetime="2021-01-02 13:54" pubdate>
-        2021年1月2日 下午
+      <time datetime="2021-01-31 14:05" pubdate>
+        2021年1月31日 下午
       </time>
     </span>
   
@@ -177,7 +177,7 @@
     
     <span class="post-meta mr-2">
       <i class="iconfont icon-chart"></i>
-      1.1k 字
+      1.2k 字
     </span>
   
 
@@ -187,7 +187,7 @@
       <i class="iconfont icon-clock-fill"></i>
       
       
-      18
+      22
        分钟
     </span>
   
@@ -225,160 +225,211 @@
         <div class="py-5" id="board">
           <article class="post-content mx-auto" id="post">
             <!-- SEO header -->
-            <h1 style="display: none">Kubernetes 源码阅读 -- Expiring</h1>
+            <h1 style="display: none">go 标准库的 heap</h1>
             
             <div class="markdown-body" id="post-body">
-              <h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p><a target="_blank" rel="noopener" href="https://github.com/kubernetes/apimachinery/blob/v0.20.1/pkg/util/cache/expiring.go"><code>Expiring</code></a> 是 Kubernets 中的一个 <strong>带有过期时间的键值对缓存</strong>，位于 <code>k8s.io/apimachinery</code> 模块的 <code>pkg/util/cache</code> 包中。</p>
-<p><code>Expiring</code> 具有以下功能与特性：</p>
-<ul>
-<li>可以存取任意类型的键值对</li>
-<li>键值对在过期后会被自动清除</li>
-<li>线程安全</li>
-</ul>
-<pre><code class="hljs Go"><span class="hljs-comment">// 添加带过期时间的键值对</span>
-<span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-params">(c *Expiring)</span> <span class="hljs-title">Set</span><span class="hljs-params">(key <span class="hljs-keyword">interface</span>&#123;&#125;, val <span class="hljs-keyword">interface</span>&#123;&#125;, ttl time.Duration)</span></span>
-
-<span class="hljs-comment">// 根据 key 获取 value</span>
-<span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-params">(c *Expiring)</span> <span class="hljs-title">Get</span><span class="hljs-params">(key <span class="hljs-keyword">interface</span>&#123;&#125;)</span> <span class="hljs-params">(val <span class="hljs-keyword">interface</span>&#123;&#125;, ok <span class="hljs-keyword">bool</span>)</span></span>
-
-<span class="hljs-comment">// 根据 key 删除键值对</span>
-<span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-params">(c *Expiring)</span> <span class="hljs-title">Delete</span><span class="hljs-params">(key <span class="hljs-keyword">interface</span>&#123;&#125;)</span></span>
-
-<span class="hljs-comment">// 获取 Expiring 中存储的键值对数量</span>
-<span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-params">(c *Expiring)</span> <span class="hljs-title">Len</span><span class="hljs-params">()</span></span></code></pre>
-
-<h2 id="Expiring-的数据结构"><a href="#Expiring-的数据结构" class="headerlink" title="Expiring 的数据结构"></a>Expiring 的数据结构</h2><p>基于上述的功能与特性，<code>Expiring</code> 提供了以下方法：</p>
-<p><code>Expiring</code> 的数据结构设计如下：</p>
-<pre><code class="hljs Go"><span class="hljs-keyword">type</span> Expiring <span class="hljs-keyword">struct</span> &#123;
-    <span class="hljs-comment">// 时钟接口，使用该接口主要是为了便于测试</span>
-    <span class="hljs-comment">// 在 Expiring 中用到其中的 Now 方法，该方法可以直接看作 time.Now</span>
-    clock utilclock.Clock
-    <span class="hljs-comment">// 读写锁，用于保证线程安全</span>
-    mu sync.RWMutex
-    <span class="hljs-comment">// 实际存储键值对的数据结构</span>
-    cache <span class="hljs-keyword">map</span>[<span class="hljs-keyword">interface</span>&#123;&#125;]entry
-    <span class="hljs-comment">// 全局版本号，用来实现键值对过期时间的更新</span>
-    generation <span class="hljs-keyword">uint64</span>
-    <span class="hljs-comment">// 存储过期时间的最小堆</span>
-    heap expiringHeap
+              <p>go 标准库提供的 <a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Heap_(data_structure)">堆</a> 虽然在 <a target="_blank" rel="noopener" href="https://github.com/golang/go/tree/master/src/container/heap"><code>container</code></a> 包里，但它其实并没有像 <code>list</code> 和 <code>ring</code> 那样提供一个实实在在的容器，事实上它定义了一个如下的接口和一系列堆的基本操作，只要是实现了该接口的结构就可以被认为是一个堆，从而把堆的操作方法用到该结构上。</p>
+<pre><code class="hljs go"><span class="hljs-keyword">type</span> Interface <span class="hljs-keyword">interface</span> &#123;
+    <span class="hljs-comment">// 排序接口</span>
+    sort.Interface
+    <span class="hljs-comment">// 追加元素</span>
+    Push(x <span class="hljs-keyword">interface</span>&#123;&#125;)
+    <span class="hljs-comment">// 移除首个元素</span>
+    Pop() <span class="hljs-keyword">interface</span>&#123;&#125;
 &#125;</code></pre>
 
-<p>其中 <code>entry</code> 的数据结构如下：</p>
-<pre><code class="hljs Go"><span class="hljs-keyword">type</span> entry <span class="hljs-keyword">struct</span> &#123;
-    <span class="hljs-comment">// 用户输入的 value</span>
-    val        <span class="hljs-keyword">interface</span>&#123;&#125;
-    <span class="hljs-comment">// 用户指定的过期时间</span>
-    expiry     time.Time
-    <span class="hljs-comment">// 存储当前键值对时 Expiring 的版本号</span>
-    generation <span class="hljs-keyword">uint64</span>
-&#125;</code></pre>
-
-<h3 id="expiringHeap"><a href="#expiringHeap" class="headerlink" title="expiringHeap"></a>expiringHeap</h3><p><a target="_blank" rel="noopener" href="https://github.com/kubernetes/apimachinery/blob/v0.20.1/pkg/util/cache/expiring.go#L168"><code>expiringHeap</code></a> 是一个存储键值对过期时间的最小堆，其数据结构如下：</p>
-<pre><code class="hljs Go"><span class="hljs-keyword">type</span> expiringHeap []*expiringHeapEntry
-
-<span class="hljs-keyword">type</span> expiringHeapEntry <span class="hljs-keyword">struct</span> &#123;
-    <span class="hljs-comment">// 用户输入的 key</span>
-    key        <span class="hljs-keyword">interface</span>&#123;&#125;
-    <span class="hljs-comment">// 过期时间</span>
-    expiry     time.Time
-    <span class="hljs-comment">// 存储当前键值对时 Expiring 的版本号</span>
-    generation <span class="hljs-keyword">uint64</span>
+<p><strong>注意</strong> <code>Interface</code> 中的 <code>Push</code> 和 <code>Pop</code> 方法是针对要实现该接口的数据接口本身的追加和移除操作，并非我们通常说的堆的 <code>Push</code> 和 <code>Pop</code> 方法，在使用堆时切记使用的是 <code>heap.Push(h, x)</code> 和 <code>heap.Pop(h)</code> 。</p>
+<h2 id="堆的初始化"><a href="#堆的初始化" class="headerlink" title="堆的初始化"></a>堆的初始化</h2><pre><code class="hljs go"><span class="hljs-comment">// 把给定的结构初始化成一个 最小堆</span>
+<span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">Init</span><span class="hljs-params">(h Interface)</span></span> &#123;
+    n := h.Len()
+    <span class="hljs-comment">// i = n / 2 - 1</span>
+    <span class="hljs-comment">// 2i + 1 = n - 1 =&gt; i 是 非叶子节点</span>
+    <span class="hljs-comment">// 对所有非叶子节点进行下沉操作</span>
+    <span class="hljs-keyword">for</span> i := n/<span class="hljs-number">2</span> - <span class="hljs-number">1</span>; i &gt;= <span class="hljs-number">0</span>; i-- &#123;
+        down(h, i, n)
+    &#125;
 &#125;
 
-<span class="hljs-comment">// expiringHeap 实现了 heap.Interface 接口</span>
-<span class="hljs-comment">// 即可以当作堆来使用</span>
-<span class="hljs-keyword">var</span> _ heap.Interface = &amp;expiringHeap&#123;&#125;
-
-<span class="hljs-comment">// 比较的是过期时间</span>
-<span class="hljs-comment">// expiringHeapEntry 中的元素 i 小于 元素 j 当且仅当 i 的过期时间小于 j 的过期时间</span>
-<span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-params">(cq expiringHeap)</span> <span class="hljs-title">Less</span><span class="hljs-params">(i, j <span class="hljs-keyword">int</span>)</span> <span class="hljs-title">bool</span></span> &#123;
-    <span class="hljs-keyword">return</span> cq[i].expiry.Before(cq[j].expiry)
-&#125;
-
-<span class="hljs-comment">// heap.Interface 的其它方法的实现较为常见，在此忽略</span></code></pre>
-
-<h2 id="Expiring-的实现"><a href="#Expiring-的实现" class="headerlink" title="Expiring 的实现"></a>Expiring 的实现</h2><h3 id="Set"><a href="#Set" class="headerlink" title="Set"></a>Set</h3><pre><code class="hljs Go"><span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-params">(c *Expiring)</span> <span class="hljs-title">Set</span><span class="hljs-params">(key <span class="hljs-keyword">interface</span>&#123;&#125;, val <span class="hljs-keyword">interface</span>&#123;&#125;, ttl time.Duration)</span></span> &#123;
-    <span class="hljs-comment">// 计算超时时间</span>
-    now := c.clock.Now()
-    expiry := now.Add(ttl)
-
-    <span class="hljs-comment">// 加写锁保证线程安全</span>
-    c.mu.Lock()
-    <span class="hljs-keyword">defer</span> c.mu.Unlock()
-
-    <span class="hljs-comment">// 全局版本号自增</span>
-    c.generation++
-
-    <span class="hljs-comment">// 存储 value</span>
-    c.cache[key] = entry&#123;
-        val:        val,
-        expiry:     expiry,
-        generation: c.generation,
-    &#125;
-
-    <span class="hljs-comment">// 清理已过期的键值对</span>
-    <span class="hljs-comment">// Run GC inline before pushing the new entry.</span>
-    c.gc(now)
-
-    <span class="hljs-comment">// 过期时间存入最小堆中</span>
-    heap.Push(&amp;c.heap, &amp;expiringHeapEntry&#123;
-        key:        key,
-        expiry:     expiry,
-        generation: c.generation,
-    &#125;)
-&#125;</code></pre>
-
-<h4 id="Get"><a href="#Get" class="headerlink" title="Get"></a>Get</h4><pre><code class="hljs Go"><span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-params">(c *Expiring)</span> <span class="hljs-title">Get</span><span class="hljs-params">(key <span class="hljs-keyword">interface</span>&#123;&#125;)</span> <span class="hljs-params">(val <span class="hljs-keyword">interface</span>&#123;&#125;, ok <span class="hljs-keyword">bool</span>)</span></span> &#123;
-    <span class="hljs-comment">// 加读锁保证线程安全</span>
-    c.mu.RLock()
-    <span class="hljs-keyword">defer</span> c.mu.RUnlock()
-    e, ok := c.cache[key]
-    <span class="hljs-keyword">if</span> !ok || !c.clock.Now().Before(e.expiry) &#123;
-        <span class="hljs-comment">// 如果键值对存在但已过期则当作不存在返回</span>
-        <span class="hljs-keyword">return</span> <span class="hljs-literal">nil</span>, <span class="hljs-literal">false</span>
-    &#125;
-    <span class="hljs-keyword">return</span> e.val, <span class="hljs-literal">true</span>
-&#125;</code></pre>
-
-<h3 id="清理过期的键值对"><a href="#清理过期的键值对" class="headerlink" title="清理过期的键值对"></a>清理过期的键值对</h3><pre><code class="hljs Go"><span class="hljs-comment">// 将 Expiring 所有过期的键值对清除</span>
-<span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-params">(c *Expiring)</span> <span class="hljs-title">gc</span><span class="hljs-params">(now time.Time)</span></span> &#123;
+<span class="hljs-comment">// 节点下沉操作</span>
+<span class="hljs-comment">// n: 下沉操作的界限</span>
+<span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">down</span><span class="hljs-params">(h Interface, i0, n <span class="hljs-keyword">int</span>)</span> <span class="hljs-title">bool</span></span> &#123;
+    i := i0
     <span class="hljs-keyword">for</span> &#123;
-        <span class="hljs-keyword">if</span> <span class="hljs-built_in">len</span>(c.heap) == <span class="hljs-number">0</span> || now.Before(c.heap[<span class="hljs-number">0</span>].expiry) &#123;
-            <span class="hljs-comment">// 因为过期时间的 entry 以最小堆的形式组织</span>
-            <span class="hljs-comment">// 所以如果第一个元素没有过期的话其余的元素也肯定没有过期</span>
-            <span class="hljs-keyword">return</span>
+        j1 := <span class="hljs-number">2</span>*i + <span class="hljs-number">1</span>
+        <span class="hljs-comment">// 下沉是考虑的节点不超过 n</span>
+        <span class="hljs-comment">// 可以观察下 Init/Fix 和 Pop/Remove 时 n 的值</span>
+        <span class="hljs-keyword">if</span> j1 &gt;= n || j1 &lt; <span class="hljs-number">0</span> &#123; <span class="hljs-comment">// j1 &lt; 0 after int overflow</span>
+            <span class="hljs-keyword">break</span>
         &#125;
-        cleanup := heap.Pop(&amp;c.heap).(*expiringHeapEntry)
-        <span class="hljs-comment">// 执行清理操作</span>
-        c.del(cleanup.key, cleanup.generation)
+        j := j1 <span class="hljs-comment">// left child</span>
+        <span class="hljs-comment">// 选出左、右子节点中较小的</span>
+        <span class="hljs-keyword">if</span> j2 := j1 + <span class="hljs-number">1</span>; j2 &lt; n &amp;&amp; h.Less(j2, j1) &#123;
+            j = j2 <span class="hljs-comment">// = 2*i + 2  // right child</span>
+        &#125;
+        <span class="hljs-keyword">if</span> !h.Less(j, i) &#123;
+            <span class="hljs-comment">// 子节点不小于父节点 (已经是有序的)</span>
+            <span class="hljs-keyword">break</span>
+        &#125;
+        <span class="hljs-comment">// 父节点与左、右子节点中较小的进行交换</span>
+        h.Swap(i, j)
+        <span class="hljs-comment">// 原来的父节点已经变为子节点，考虑是否还要继续下沉</span>
+        i = j
     &#125;
-&#125;
-
-<span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-params">(c *Expiring)</span> <span class="hljs-title">del</span><span class="hljs-params">(key <span class="hljs-keyword">interface</span>&#123;&#125;, generation <span class="hljs-keyword">uint64</span>)</span></span> &#123;
-    e, ok := c.cache[key]
-    <span class="hljs-keyword">if</span> !ok &#123;
-        <span class="hljs-keyword">return</span>
-    &#125;
-    <span class="hljs-comment">// generation == 0 标识该方法是由 Delete 调用的，键值对一定需要删除</span>
-    <span class="hljs-comment">// generation != 0 则说明该方法由 gc 调用</span>
-    <span class="hljs-comment">//      当 gc 调用该方法时如果该键值对在 cache 中存储的过期时间与在最小堆中存储的版本号不一致则说明</span>
-    <span class="hljs-comment">//      该键值对被更新过，当前的过期时间 entry 已经无效了，忽略就行（堆中还存在着该键值对的其它过期时间 entry）</span>
-    <span class="hljs-keyword">if</span> generation != <span class="hljs-number">0</span> &amp;&amp; generation != e.generation &#123;
-        <span class="hljs-keyword">return</span>
-    &#125;
-    <span class="hljs-built_in">delete</span>(c.cache, key)
-&#125;
-
-<span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-params">(c *Expiring)</span> <span class="hljs-title">Delete</span><span class="hljs-params">(key <span class="hljs-keyword">interface</span>&#123;&#125;)</span></span> &#123;
-    c.mu.Lock()
-    <span class="hljs-keyword">defer</span> c.mu.Unlock()
-    c.del(key, <span class="hljs-number">0</span>)
+    <span class="hljs-comment">// 返回 i0 节点是否下沉了</span>
+    <span class="hljs-keyword">return</span> i &gt; i0
 &#125;</code></pre>
 
-<h3 id="utilclock-Clock"><a href="#utilclock-Clock" class="headerlink" title="utilclock.Clock"></a>utilclock.Clock</h3><p>在测试 <code>Expiring</code> 时，添加键值对需要指定过期时间，这可能导致测试时间变得很长，<br><code>Expiring</code> 中引入 <a target="_blank" rel="noopener" href="https://github.com/kubernetes/apimachinery/blob/v0.20.1/pkg/util/clock/clock.go"><code>utilclock.Clock</code></a> 能够让测试变得更加简单迅速。</p>
-<p>在实际使用时，<code>Expiring</code> 使用的是 <a target="_blank" rel="noopener" href="https://github.com/kubernetes/apimachinery/blob/v0.20.1/pkg/util/clock/clock.go#L43"><code>RealClock</code></a>，它使用的是真实的时间。</p>
-<p>而在测试时则可以使用 <a target="_blank" rel="noopener" href="https://github.com/kubernetes/apimachinery/blob/v0.20.1/pkg/util/clock/clock.go#L85"><code>FakeClock</code></a> 来 “快进” 到任意时间。</p>
-<p>下一篇文章将对 <code>Clock</code> 进行详细的介绍。</p>
+<h2 id="插入元素"><a href="#插入元素" class="headerlink" title="插入元素"></a>插入元素</h2><pre><code class="hljs go"><span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">Push</span><span class="hljs-params">(h Interface, x <span class="hljs-keyword">interface</span>&#123;&#125;)</span></span> &#123;
+    h.Push(x)
+    <span class="hljs-comment">// 添加的元素是堆对应二叉树的最右下的节点</span>
+    <span class="hljs-comment">// 考虑该元素是否需要上浮</span>
+    up(h, h.Len()<span class="hljs-number">-1</span>)
+&#125;
+
+<span class="hljs-comment">// 元素上浮操作</span>
+<span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">up</span><span class="hljs-params">(h Interface, j <span class="hljs-keyword">int</span>)</span></span> &#123;
+    <span class="hljs-keyword">for</span> &#123;
+        i := (j - <span class="hljs-number">1</span>) / <span class="hljs-number">2</span> <span class="hljs-comment">// parent</span>
+        <span class="hljs-keyword">if</span> i == j || !h.Less(j, i) &#123;
+            <span class="hljs-comment">// 该元素不小于父节点</span>
+            <span class="hljs-keyword">break</span>
+        &#125;
+        <span class="hljs-comment">// 与父节点交换</span>
+        h.Swap(i, j)
+        <span class="hljs-comment">// 考虑是否需要继续上浮</span>
+        j = i
+    &#125;
+&#125;</code></pre>
+
+<h2 id="弹出元素与移除某个元素"><a href="#弹出元素与移除某个元素" class="headerlink" title="弹出元素与移除某个元素"></a>弹出元素与移除某个元素</h2><pre><code class="hljs go"><span class="hljs-comment">// 移除堆的根节点</span>
+<span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">Pop</span><span class="hljs-params">(h Interface)</span> <span class="hljs-title">interface</span></span>&#123;&#125; &#123;
+    n := h.Len() - <span class="hljs-number">1</span>
+    <span class="hljs-comment">// 根节点与最后一个（最右下）元素交换</span>
+    h.Swap(<span class="hljs-number">0</span>, n)
+    <span class="hljs-comment">// 对交换后的根节点进行下沉操作</span>
+    <span class="hljs-comment">// 注意下沉时的界限为 倒数第二个 元素 （不包括最后一个元素，否则就白交换了）</span>
+    down(h, <span class="hljs-number">0</span>, n)
+    <span class="hljs-comment">// 移除最后一个元素，即原来的根节点</span>
+    <span class="hljs-keyword">return</span> h.Pop()
+&#125;
+
+<span class="hljs-comment">// 移除堆的第 n 个节点</span>
+<span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">Remove</span><span class="hljs-params">(h Interface, i <span class="hljs-keyword">int</span>)</span> <span class="hljs-title">interface</span></span>&#123;&#125; &#123;
+    n := h.Len() - <span class="hljs-number">1</span>
+    <span class="hljs-comment">// 如果是最后一个节点的话直接移除</span>
+    <span class="hljs-keyword">if</span> n != i &#123;
+        h.Swap(i, n)
+        <span class="hljs-keyword">if</span> !down(h, i, n) &#123;
+            <span class="hljs-comment">// 交换、下沉与 Pop 类似</span>
+            <span class="hljs-comment">// 因为 i 不一定是根节点，如果有下沉操作的话还要考虑是否要进行上浮</span>
+            up(h, i)
+        &#125;
+    &#125;
+    <span class="hljs-keyword">return</span> h.Pop()
+&#125;</code></pre>
+
+<h2 id="修复"><a href="#修复" class="headerlink" title="修复"></a>修复</h2><pre><code class="hljs go"><span class="hljs-comment">// 节点 i 的值发生变化后需要对堆进行修复</span>
+<span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">Fix</span><span class="hljs-params">(h Interface, i <span class="hljs-keyword">int</span>)</span></span> &#123;
+    <span class="hljs-comment">// 先下沉</span>
+    <span class="hljs-keyword">if</span> !down(h, i, h.Len()) &#123;
+        <span class="hljs-comment">// 如果有下沉操作则考虑上浮</span>
+        up(h, i)
+    &#125;
+&#125;</code></pre>
+
+<h2 id="使用示例"><a href="#使用示例" class="headerlink" title="使用示例"></a>使用示例</h2><p>使用堆实现 <a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Dijkstra%27s_algorithm">Dijkstra’s algorithm</a> 来解决 <a target="_blank" rel="noopener" href="https://leetcode-cn.com/problems/path-with-minimum-effort/">Leetcode 1631. 最小体力消耗路径</a> 问题：</p>
+<pre><code class="hljs go"><span class="hljs-keyword">type</span> node <span class="hljs-keyword">struct</span> &#123;
+    x, y, distance <span class="hljs-keyword">int</span>
+&#125;
+
+<span class="hljs-comment">// 定义堆</span>
+<span class="hljs-keyword">type</span> nodeHeap []*node
+
+<span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-params">(h nodeHeap)</span> <span class="hljs-title">Len</span><span class="hljs-params">()</span> <span class="hljs-title">int</span></span> &#123;
+    <span class="hljs-keyword">return</span> <span class="hljs-built_in">len</span>(h)
+&#125;
+
+<span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-params">(h nodeHeap)</span> <span class="hljs-title">Less</span><span class="hljs-params">(i, j <span class="hljs-keyword">int</span>)</span> <span class="hljs-title">bool</span></span> &#123;
+    <span class="hljs-keyword">return</span> h[i].distance &lt; h[j].distance
+&#125;
+
+<span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-params">(h nodeHeap)</span> <span class="hljs-title">Swap</span><span class="hljs-params">(i, j <span class="hljs-keyword">int</span>)</span></span> &#123;
+    h[i], h[j] = h[j], h[i]
+&#125;
+
+<span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-params">(h *nodeHeap)</span> <span class="hljs-title">Pop</span><span class="hljs-params">()</span> <span class="hljs-title">interface</span></span>&#123;&#125; &#123;
+    tail := <span class="hljs-built_in">len</span>(*h) - <span class="hljs-number">1</span>
+    x := (*h)[tail]
+    *h = (*h)[<span class="hljs-number">0</span>:tail]
+    <span class="hljs-keyword">return</span> x
+&#125;
+
+<span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-params">(h *nodeHeap)</span> <span class="hljs-title">Push</span><span class="hljs-params">(x <span class="hljs-keyword">interface</span>&#123;&#125;)</span></span> &#123;
+    *h = <span class="hljs-built_in">append</span>(*h, x.(*node))
+&#125;
+
+<span class="hljs-comment">// 4 个方向</span>
+<span class="hljs-keyword">var</span> direct = [<span class="hljs-number">4</span>][<span class="hljs-number">2</span>]<span class="hljs-keyword">int</span>&#123;
+    &#123;<span class="hljs-number">0</span>, <span class="hljs-number">1</span>&#125;,
+    &#123;<span class="hljs-number">0</span>, <span class="hljs-number">-1</span>&#125;,
+    &#123;<span class="hljs-number">1</span>, <span class="hljs-number">0</span>&#125;,
+    &#123;<span class="hljs-number">-1</span>, <span class="hljs-number">0</span>&#125;,
+&#125;
+
+<span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">max</span><span class="hljs-params">(x, y <span class="hljs-keyword">int</span>)</span> <span class="hljs-title">int</span></span> &#123;
+    <span class="hljs-keyword">if</span> x &gt; y &#123;
+        <span class="hljs-keyword">return</span> x
+    &#125;
+    <span class="hljs-keyword">return</span> y
+&#125;
+
+<span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">abs</span><span class="hljs-params">(x <span class="hljs-keyword">int</span>)</span> <span class="hljs-title">int</span></span> &#123;
+    <span class="hljs-keyword">if</span> x &lt; <span class="hljs-number">0</span> &#123;
+        <span class="hljs-keyword">return</span> -x
+    &#125;
+    <span class="hljs-keyword">return</span> x
+&#125;
+
+<span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">minimumEffortPath</span><span class="hljs-params">(heights [][]<span class="hljs-keyword">int</span>)</span> <span class="hljs-title">int</span></span> &#123;
+    <span class="hljs-keyword">const</span> infinity = <span class="hljs-number">10000000</span>
+    m, n := <span class="hljs-built_in">len</span>(heights), <span class="hljs-built_in">len</span>(heights[<span class="hljs-number">0</span>])
+
+    maxDis := <span class="hljs-built_in">make</span>([][]<span class="hljs-keyword">int</span>, m)
+    <span class="hljs-keyword">for</span> i:=<span class="hljs-number">0</span>;i&lt;m;i++&#123;
+        maxDis[i] = <span class="hljs-built_in">make</span>([]<span class="hljs-keyword">int</span>, n)
+        <span class="hljs-keyword">for</span> j:=<span class="hljs-number">0</span>;j&lt;n;j++&#123;
+            maxDis[i][j] = infinity
+        &#125;
+    &#125;
+
+    nh := &amp;nodeHeap&#123;&#123;
+        x: <span class="hljs-number">0</span>,
+        y: <span class="hljs-number">0</span>,
+    &#125;&#125;
+    heap.Init(nh)
+    <span class="hljs-keyword">for</span> &#123;
+        p := heap.Pop(nh).(*node)
+        <span class="hljs-keyword">if</span> p.x == m<span class="hljs-number">-1</span> &amp;&amp; p.y == n<span class="hljs-number">-1</span> &#123;
+            <span class="hljs-keyword">return</span> p.distance
+        &#125;
+        <span class="hljs-keyword">for</span> _, d := <span class="hljs-keyword">range</span> direct &#123;
+            x, y := p.x + d[<span class="hljs-number">0</span>], p.y + d[<span class="hljs-number">1</span>]
+            <span class="hljs-keyword">if</span> x &gt;= <span class="hljs-number">0</span> &amp;&amp; x &lt; m &amp;&amp; y &gt;= <span class="hljs-number">0</span> &amp;&amp; y &lt; n &#123;
+                d := max(p.distance, abs(heights[p.x][p.y] - heights[x][y]))
+                <span class="hljs-keyword">if</span> d &lt; maxDis[x][y] &#123;
+                    maxDis[x][y] = d
+                    heap.Push(nh, &amp;node&#123;
+                        x: x,
+                        y: y,
+                        distance: d,
+                    &#125;)
+                &#125;
+            &#125;
+        &#125;
+    &#125;
+
+    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>
+&#125;</code></pre>
 
             </div>
             <hr>
@@ -388,7 +439,7 @@
                   <div class="post-meta mr-3">
                     <i class="iconfont icon-category"></i>
                     
-                      <a class="hover-with-bg" href="/categories/kubernetes/">kubernetes</a>
+                      <a class="hover-with-bg" href="/categories/golang/">golang</a>
                     
                   </div>
                 
@@ -396,13 +447,11 @@
                   <div class="post-meta">
                     <i class="iconfont icon-tags"></i>
                     
-                      <a class="hover-with-bg" href="/tags/k8s/">k8s</a>
-                    
                       <a class="hover-with-bg" href="/tags/%E6%BA%90%E7%A0%81/">源码</a>
                     
-                      <a class="hover-with-bg" href="/tags/cache/">cache</a>
+                      <a class="hover-with-bg" href="/tags/golang/">golang</a>
                     
-                      <a class="hover-with-bg" href="/tags/apimachinery/">apimachinery</a>
+                      <a class="hover-with-bg" href="/tags/%E5%A0%86/">堆</a>
                     
                   </div>
                 
@@ -415,18 +464,12 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/2021/01/24/sync-Once%E4%B8%AD%E7%9A%84%E5%BF%AB%E9%80%9F%E8%B7%AF%E5%BE%84/">
-                        <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">sync.Once中的快速路径</span>
-                        <span class="visible-mobile">上一篇</span>
-                      </a>
-                    
                   </article>
                   <article class="post-next col-6">
                     
                     
-                      <a href="/2020/10/22/Kubernetes-%E6%BA%90%E7%A0%81%E9%98%85%E8%AF%BB-Indexer/">
-                        <span class="hidden-mobile">Kubernetes 源码阅读 -- Indexer</span>
+                      <a href="/2021/01/24/sync-Once%E4%B8%AD%E7%9A%84%E5%BF%AB%E9%80%9F%E8%B7%AF%E5%BE%84/">
+                        <span class="hidden-mobile">sync.Once中的快速路径</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>
@@ -712,7 +755,7 @@
       if ('true' === 'true') {
         var viewCtn = document.querySelector('#leancloud-post-views-container');
         if (viewCtn || enableIncr) {
-          var target = decodeURI('/2021/01/02/Kubernetes-%E6%BA%90%E7%A0%81%E9%98%85%E8%AF%BB-Expiring/');
+          var target = decodeURI('/2021/01/31/go-%E6%A0%87%E5%87%86%E5%BA%93%E6%BA%90%E7%A0%81-heap/');
           var viewGetter = getRecord(Counter, target).then((record) => {
             incrArr.push(buildIncrement(record.objectId))
             if (viewCtn) {
@@ -806,7 +849,7 @@
     var typed = new Typed('#subtitle', {
       strings: [
         '  ',
-        "Kubernetes 源码阅读 -- Expiring&nbsp;",
+        "go 标准库的 heap&nbsp;",
       ],
       cursorChar: "_",
       typeSpeed: 70,

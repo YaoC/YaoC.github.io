@@ -176,11 +176,66 @@
     
     <article class="col-12 col-md-12 mx-auto index-info">
       <h1 class="index-header">
-        <a href="/2021/01/25/sync-Once%E4%B8%AD%E7%9A%84%E5%BF%AB%E9%80%9F%E8%B7%AF%E5%BE%84/">sync.Once中的快速路径</a>
+        <a href="/2021/01/31/go-%E6%A0%87%E5%87%86%E5%BA%93%E6%BA%90%E7%A0%81-heap/">go 标准库的 heap</a>
       </h1>
 
       <p class="index-excerpt">
-        <a href="/2021/01/25/sync-Once%E4%B8%AD%E7%9A%84%E5%BF%AB%E9%80%9F%E8%B7%AF%E5%BE%84/">
+        <a href="/2021/01/31/go-%E6%A0%87%E5%87%86%E5%BA%93%E6%BA%90%E7%A0%81-heap/">
+          
+          
+            
+          
+          go 标准库提供的 堆 虽然在 container 包里，但它其实并没有像 list 和 ring 那样提供一个实实在在的容器，事实上它定义了一个如下的接口和一系列堆的基本操作，只要是实现了该接口的结构就可以被认为是一个堆，从而把堆的操作方法用到该结构上。
+type Interface interface &#123;
+    // 排序接口
+    sort.Interface
+    // 追
+        </a>
+      </p>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>
+            <time datetime="2021-01-31 14:05" pubdate>
+              2021-01-31
+            </time>
+          </div>
+        
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-category"></i>
+            
+              <a href="/categories/golang/">golang</a>
+            
+          </div>
+        
+        
+          <div class="post-meta">
+            <i class="iconfont icon-tags"></i>
+            
+              <a href="/tags/%E6%BA%90%E7%A0%81/">源码</a>
+            
+              <a href="/tags/golang/">golang</a>
+            
+              <a href="/tags/%E5%A0%86/">堆</a>
+            
+          </div>
+        
+      </div>
+    </article>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+    <article class="col-12 col-md-12 mx-auto index-info">
+      <h1 class="index-header">
+        <a href="/2021/01/24/sync-Once%E4%B8%AD%E7%9A%84%E5%BF%AB%E9%80%9F%E8%B7%AF%E5%BE%84/">sync.Once中的快速路径</a>
+      </h1>
+
+      <p class="index-excerpt">
+        <a href="/2021/01/24/sync-Once%E4%B8%AD%E7%9A%84%E5%BF%AB%E9%80%9F%E8%B7%AF%E5%BE%84/">
           
           
             
@@ -200,8 +255,8 @@ f
         
           <div class="post-meta mr-3">
             <i class="iconfont icon-date"></i>
-            <time datetime="2021-01-25 00:23" pubdate>
-              2021-01-25
+            <time datetime="2021-01-24 16:23" pubdate>
+              2021-01-24
             </time>
           </div>
         
@@ -259,7 +314,7 @@ func (c *Expiring) Set(key interface&#123;&#
         
           <div class="post-meta mr-3">
             <i class="iconfont icon-date"></i>
-            <time datetime="2021-01-02 21:54" pubdate>
+            <time datetime="2021-01-02 13:54" pubdate>
               2021-01-02
             </time>
           </div>
